@@ -12,7 +12,10 @@ export default function SetupComponent({
           <strong>VYTVORKONVERZKU</strong> project. To get it up and running,
           you need to set the following environment variables for now:
         </p>
-        <div className="flex flex-col mt-4">
+        <div
+          className="flex flex-col"
+          style={{ gap: "16px", marginTop: "16px" }}
+        >
           {neededEnvs.map((env, i) => {
             return (
               <div className="flex flex-col" key={i}>
@@ -29,9 +32,12 @@ export default function SetupComponent({
             );
           })}
         </div>
-        <div className="flex justify-end mt-4">
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-md">
-            Save
+        <div className="flex justify-end" style={{ marginTop: "16px" }}>
+          <button
+            className="bg-blue-500 text-white font-bold uppercase"
+            style={{ padding: "8px 16px" }}
+          >
+            Continue
           </button>
         </div>
       </div>

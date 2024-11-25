@@ -1,3 +1,4 @@
+import { neededEnvs } from "@/lib/serverConsts";
 import "@/styles/globals.css";
 import SetupComponent from "@/technicality/SetupComponent";
 import { SessionProvider } from "next-auth/react";
@@ -15,7 +16,6 @@ export default function App({ Component, pageProps }: AppProps) {
 }
 App.getInitialProps = async () => {
   const envs = process.env;
-  const neededEnvs = ["NEXTAUTH_SECRET", "NEXTAUTH_URL", "DATABASE_URL"];
   const needSetup = neededEnvs.some((env) => !envs[env]);
   return {
     pageProps: {
