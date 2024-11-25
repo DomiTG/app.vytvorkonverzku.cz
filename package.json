@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "initinstall": "npm install -d --force",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
