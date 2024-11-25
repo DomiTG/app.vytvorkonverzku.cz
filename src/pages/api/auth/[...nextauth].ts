@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 console.log("loading");
@@ -34,28 +34,10 @@ const authOptions = {
   session: {
     strategy: "jwt", // Use JWT for session tokens
   },
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.email = user.email;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (token) {
-        session.user = {
-          id: token.id,
-          email: token.email,
-        };
-      }
-      return session;
-    },
-  },
   pages: {
     signIn: "/auth/signin", // Optional custom sign-in page
   },
   secret: process.env.NEXTAUTH_SECRET, // Set a secret for encrypting JWT tokens
-};
+} as NextAuthOptions;
 
 export default NextAuth(authOptions);
