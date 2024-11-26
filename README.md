@@ -9,6 +9,7 @@
 <p align="center">
   <a href="#introduction"><strong>Introduction</strong></a> ·
   <a href="#built-with"><strong>Built with</strong></a> ·
+  <a href="#how-to-install"><strong>How to install</strong></a> ·
   <a href="#contributing"><strong>Contributing</strong></a> ·
   <a href="#license"><strong>License</strong></a>
 </p>
@@ -24,6 +25,25 @@
 - [NextAuth.js](https://next-auth.js.org)
 - [Vercel](https://vercel.com/)
 - [Tailwind CSS](https://tailwindcss.com)
+
+## How to install
+Instalation of Vytvorkonverzku is quite simple. It is designated to be used with Vercel, but can be used with any other hosting provider or on your own server. Here is a step by step guide on how to install Vytvorkonverzku:
+# Vercel
+ 1. Step - Fork this repository
+ 2. Step - Go to vercel.app dashboard
+ 3. Step - Click on "Add New."
+ 4. Step - There click on "Project", you should see "Import Git Repository"
+ 5. Step - Find the repository you forked and click on it
+ 6. Step - Framework preset should be "Next.js" and root directory should be "./"
+ 7. Step - Now, we need to update our commands and environment variables
+    - Build and Output Settings
+      - Install Command: ```sh npm i -d --force```
+    - Environment Variables
+      - DATABASE_URL: Your database URL - for example: ```postgresql://user:password@localhost:5432/database```
+      - NEXTAUTH_URL: Your website URL
+      - NEXTAUTH_SECRET: Your secret key - Absolutely random string
+  8. Click on "Deploy" and wait for the deployment to finish
+  9. After the deployment is finished, click on "Visit" and you should see the website
 
 ## Contributing
 We welcome contributions to Vytvorkonverzku. If you would like to contribute, please fork the repository and submit a pull request. We are always looking for new features and improvements to the system. If you have any questions or need help, please feel free to contact us.
