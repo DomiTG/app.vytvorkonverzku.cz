@@ -80,8 +80,88 @@ Installing **Vytvorkonverzku** is straightforward and designed for easy deployme
 For further assistance or troubleshooting, consult the [Vercel Documentation](https://vercel.com/docs) or the project's Wiki.
 
 ---
-
 Enjoy using **Vytvorkonverzku**!
+
+### Deploying on Your Own Server
+
+If you prefer hosting **Vytvorkonverzku** on your own server, follow these steps to set up the application manually.
+
+---
+
+#### 1. **Clone the Repository**
+   - Clone the forked repository to your server:
+     ```bash
+     git clone https://github.com/your-username/vytvorkonverzku.git
+     cd vytvorkonverzku
+     ```
+
+#### 2. **Install Dependencies**
+   - Ensure you have Node.js and npm installed on your server. Then run:
+     ```bash
+     npm install --force
+     ```
+
+#### 3. **Set Environment Variables**
+   - Create a `.env` file in the root of the project and configure the following variables:
+     ```env
+     DATABASE_URL=postgresql://user:password@localhost:5432/database
+     NEXTAUTH_URL=https://your-domain.com
+     NEXTAUTH_SECRET=your-secure-random-string
+     ```
+   - Replace the placeholders with your actual database credentials, domain, and a strong secret key.
+
+#### 4. **Build the Application**
+   - Build the project to optimize it for production:
+     ```bash
+     npm run build
+     ```
+
+#### 5. **Start the Server**
+   - Start the application using the production build:
+     ```bash
+     npm start
+     ```
+
+#### 6. **Set Up a Process Manager (Optional)**
+   - Use a process manager like **PM2** to keep the application running:
+     ```bash
+     npm install -g pm2
+     pm2 start npm --name vytvorkonverzku -- start
+     pm2 save
+     pm2 startup
+     ```
+
+#### 7. **Configure Reverse Proxy (Optional)**
+   - If serving on a custom domain, set up a reverse proxy using **NGINX** or **Apache**:
+     - Example NGINX configuration:
+       ```nginx
+       server {
+           listen 80;
+           server_name your-domain.com;
+
+           location / {
+               proxy_pass http://localhost:3000;
+               proxy_http_version 1.1;
+               proxy_set_header Upgrade $http_upgrade;
+               proxy_set_header Connection 'upgrade';
+               proxy_set_header Host $host;
+               proxy_cache_bypass $http_upgrade;
+           }
+       }
+       ```
+   - Restart your web server to apply the changes.
+
+#### 8. **Verify Your Deployment**
+   - Visit your domain or server IP in a web browser to confirm the application is running successfully.
+
+---
+
+### Additional Recommendations
+- Use **HTTPS** for secure connections (e.g., set up SSL certificates with [Let's Encrypt](https://letsencrypt.org/)).
+- Regularly update your dependencies to keep the application secure.
+- Monitor your server performance and logs for any potential issues.
+
+Enjoy hosting **Vytvorkonverzku** on your own infrastructure!
 
 ## Contributing
 We welcome contributions to Vytvorkonverzku. If you would like to contribute, please fork the repository and submit a pull request. We are always looking for new features and improvements to the system. If you have any questions or need help, please feel free to contact us.
