@@ -1,40 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+<a href="https://vytvorkonverzku.cz">
+  <h1 align="center">
+    VYTVORKONVERZKU
+  </h1>
+</a>
+<p align="center">
+  Vytvorkonverzku is a free e-shop single page system. It is a simple and easy to use system for creating and managing an e-shop.
+</p>
+<p align="center">
+  <a href="#introduction"><strong>Introduction</strong></a> ·
+  <a href="#built-with"><strong>Built with</strong></a> ·
+  <a href="#contributing"><strong>Contributing</strong></a> ·
+  <a href="#license"><strong>License</strong></a>
+</p>
+<br/>
 
-## Getting Started
+## Introduction
+[Vytvorkonverzku](https://vytvorkonverzku.cz) is a free e-shop single page system. It is a simple and easy to use system for creating and managing an e-shop. The system is designed for small businesses and individuals who want to start selling online. The system is built with the latest technologies and is fully responsive. It is easy to use and can be customized to fit your needs. The system is free to use and can be downloaded and installed on your own server. The system is open source and can be modified and extended to fit your needs.
 
-First, run the development server:
+## Built with
+- [Next.js](https://nextjs.org)
+- [TypeScript](https://typescriptlang.org)
+- [Prisma](https://prisma.io)
+- [NextAuth.js](https://next-auth.js.org)
+- [Vercel](https://vercel.com/)
+- [Tailwind CSS](https://tailwindcss.com)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Contributing
+We welcome contributions to Vytvorkonverzku. If you would like to contribute, please fork the repository and submit a pull request. We are always looking for new features and improvements to the system. If you have any questions or need help, please feel free to contact us.
+Here are some ways you can contribute:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [Open an issue](https://github.com/domitg/vytvorkonverzku/issues) if you believe
+  you've encountered a bug.
+- [Make a pull request](https://github.com/domitg/vytvorkonverzku/pulls) to add new
+  features or fix bugs. Before making a pull request, please discuss the change
+  you wish to make via issue.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+<br />
+<a href="https://github.com/domitg/vytvorkonverzku/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=domitg/vytvorkonverzku" />
+</a>
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

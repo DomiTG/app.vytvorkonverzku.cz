@@ -1,4 +1,3 @@
-import { API_URL } from "@/utils/consts";
 import Axios, { AxiosError, Method } from "axios";
 
 export class APIError extends Error {
@@ -28,7 +27,7 @@ export default class API {
   }) {
     try {
       const { data } = await Axios({
-        url: `${API_URL}${endpoint}`,
+        url: `/${endpoint}`,
         method,
         data: body ? body : null,
         headers: {
