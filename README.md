@@ -26,24 +26,62 @@
 - [Vercel](https://vercel.com/)
 - [Tailwind CSS](https://tailwindcss.com)
 
-## How to install
-Instalation of Vytvorkonverzku is quite simple. It is designated to be used with Vercel, but can be used with any other hosting provider or on your own server. Here is a step by step guide on how to install Vytvorkonverzku:
-# Vercel
- 1. Step - Fork this repository
- 2. Step - Go to vercel.app dashboard
- 3. Step - Click on "Add New."
- 4. Step - There click on "Project", you should see "Import Git Repository"
- 5. Step - Find the repository you forked and click on it
- 6. Step - Framework preset should be "Next.js" and root directory should be "./"
- 7. Step - Now, we need to update our commands and environment variables
-    - Build and Output Settings
-      - Install Command: ```sh npm i -d --force```
-    - Environment Variables
-      - DATABASE_URL: Your database URL - for example: ```postgresql://user:password@localhost:5432/database```
-      - NEXTAUTH_URL: Your website URL
-      - NEXTAUTH_SECRET: Your secret key - Absolutely random string
-  8. Click on "Deploy" and wait for the deployment to finish
-  9. After the deployment is finished, click on "Visit" and you should see the website
+# How to Install Vytvorkonverzku
+
+Installing **Vytvorkonverzku** is straightforward and designed for easy deployment with **Vercel**. However, it can also be hosted with other providers or on your own server. Follow the steps below to get started.
+
+---
+
+## Installation Guide
+
+### Deploying with Vercel
+
+1. **Fork the Repository**
+   - Start by forking this repository to your own GitHub account.
+
+2. **Access the Vercel Dashboard**
+   - Go to [Vercel's dashboard](https://vercel.com/dashboard).
+
+3. **Add a New Project**
+   - Click on the **"Add New"** button and select **"Project"**.
+
+4. **Import the Git Repository**
+   - In the **"Import Git Repository"** section, locate and select the repository you just forked.
+
+5. **Configure Project Settings**
+   - For the **Framework Preset**, select **Next.js**.
+   - Set the **Root Directory** to `./`.
+
+6. **Update Commands and Environment Variables**
+   - Configure the following settings in the **Build and Output Settings**:
+     - **Install Command**:
+       ```bash
+       npm i -d --force
+       ```
+
+   - Add the required **Environment Variables**:
+     - `DATABASE_URL`: Your database URL, e.g.,
+       `postgresql://user:password@localhost:5432/database`
+     - `NEXTAUTH_URL`: Your website URL.
+     - `NEXTAUTH_SECRET`: A random, secure string (used for authentication).
+
+7. **Deploy the Project**
+   - Click on the **"Deploy"** button to initiate the deployment process.
+
+8. **Verify Deployment**
+   - Once the deployment is complete, click on **"Visit"** to access your live website.
+
+---
+
+### Additional Notes
+- Ensure that your environment variables are set correctly to avoid deployment issues.
+- Use a strong and unique value for `NEXTAUTH_SECRET` to secure your application.
+
+For further assistance or troubleshooting, consult the [Vercel Documentation](https://vercel.com/docs) or the project's Wiki.
+
+---
+
+Enjoy using **Vytvorkonverzku**!
 
 ## Contributing
 We welcome contributions to Vytvorkonverzku. If you would like to contribute, please fork the repository and submit a pull request. We are always looking for new features and improvements to the system. If you have any questions or need help, please feel free to contact us.
