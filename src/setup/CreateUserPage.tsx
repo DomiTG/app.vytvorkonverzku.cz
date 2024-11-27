@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { MouseEventHandler, useState } from "react";
 import Axios, { AxiosError } from "axios";
 
 export default function CreateUserPage() {
@@ -10,7 +10,7 @@ export default function CreateUserPage() {
 
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: HTMLFormElement) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (loading) return;
     if (!email || !username || !password) {
