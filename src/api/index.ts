@@ -32,7 +32,7 @@ export default class API {
         data: body ? body : null,
         headers: {
           ...headers,
-          "x-access-token": `Bearer ${this.accessToken}`,
+          "authorization": `Bearer ${this.accessToken}`,
         },
         withCredentials: true,
       });
@@ -61,16 +61,13 @@ export default class API {
     return data;
   }
 
-  async login(username: string, password: string) {
+  async logOut() {
     const data = await this.request({
-      endpoint: "/auth/login",
+      endpoint: "/auth/logout",
       method: "POST",
-      body: {
-        username,
-        password,
-      },
     });
-    this.accessToken = data.accessToken;
     return data;
   }
+
+
 }

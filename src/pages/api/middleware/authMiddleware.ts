@@ -9,7 +9,7 @@ const authenticate = async (
   next: () => void,
 ) => {
   const token = req.headers.authorization?.split(" ")[1]; // Expected format: "Bearer <token>"
-
+  
   if (!token) {
     return res
       .status(401)
