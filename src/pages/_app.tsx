@@ -1,12 +1,22 @@
+import prisma from "@/lib/prisma";
+import CreateUserPage from "@/setup/CreateUserPage";
 import "@/styles/globals.css";
-import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
-  console.log(pageProps);
-  return (
-    <SessionProvider session={pageProps.session}>
-      <Component {...pageProps} />
-    </SessionProvider>
+  //ensure tailwind is working in both
+  return pageProps.users ? (
+    <Component {...pageProps} />
+  ) : (
+    <CreateUserPage {...pageProps} />
   );
 }
+
+App.getInitialProps = async () => {
+  const users = await prisma.users.count();
+  return {
+    pageProps: {
+      users,
+    },
+  };
+};

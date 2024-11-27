@@ -62,8 +62,9 @@ Installing **Vytvorkonverzku** is straightforward and designed for easy deployme
    - Add the required **Environment Variables**:
      - `DATABASE_URL`: Your database URL, e.g.,
        `postgresql://user:password@localhost:5432/database`
-     - `NEXTAUTH_URL`: Your website URL.
-     - `NEXTAUTH_SECRET`: A random, secure string (used for authentication).
+     - `ACCESS_TOKEN_SECRET`: A secure random string for JWT token generation. !UNIQUE!
+     - `REFRESH_TOKEN_SECRET`: A secure random string for JWT token generation. !UNIQUE!
+     - `2FA_TOKEN_SECRET`: A secure random string for two-factor authentication.
 
 7. **Deploy the Project**
    - Click on the **"Deploy"** button to initiate the deployment process.
@@ -75,7 +76,7 @@ Installing **Vytvorkonverzku** is straightforward and designed for easy deployme
 
 ### Additional Notes
 - Ensure that your environment variables are set correctly to avoid deployment issues.
-- Use a strong and unique value for `NEXTAUTH_SECRET` to secure your application.
+- Use a strong and unique values for the `ACCESS_TOKEN_SECRET`, `REFRESH_TOKEN_SECRET`, and `2FA_TOKEN_SECRET` variables.
 
 For further assistance or troubleshooting, consult the [Vercel Documentation](https://vercel.com/docs) or the project's Wiki.
 
@@ -91,7 +92,7 @@ If you prefer hosting **Vytvorkonverzku** on your own server, follow these steps
 #### 1. **Clone the Repository**
    - Clone the forked repository to your server:
      ```bash
-     git clone https://github.com/your-username/vytvorkonverzku.git
+     git clone https://github.com/DomiTG/vytvorkonverzku.git
      cd vytvorkonverzku
      ```
 
@@ -104,9 +105,10 @@ If you prefer hosting **Vytvorkonverzku** on your own server, follow these steps
 #### 3. **Set Environment Variables**
    - Create a `.env` file in the root of the project and configure the following variables:
      ```env
+     ACCESS_TOKEN_SECRET=your-access-token-secret
+     REFRESH_TOKEN_SECRET=your-refresh-token-secret
+     2FA_TOKEN_SECRET=your-2fa-token-secret
      DATABASE_URL=postgresql://user:password@localhost:5432/database
-     NEXTAUTH_URL=https://your-domain.com
-     NEXTAUTH_SECRET=your-secure-random-string
      ```
    - Replace the placeholders with your actual database credentials, domain, and a strong secret key.
 
