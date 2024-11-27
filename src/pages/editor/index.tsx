@@ -8,48 +8,121 @@ export default function Home() {
     useState<AbstractComponent | null>(null);
 
   const [canvasComponents, setCanvasComponents] = useState<AbstractComponent[]>(
-    [],
+    []
   );
   const [selectedComponent, setSelectedComponent] =
     useState<AbstractComponent | null>(null);
 
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const itemsPerPage = 5;
+
   return (
     <div className="flex flex-row min-h-screen">
       {newComponentModal && (
-        <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex justify-center items-center p-4">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg">
-            <h2 className="text-3xl font-semibold text-center mb-6">
-              New Component
+        <div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-75 flex justify-center items-center p-4">
+          <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-3xl relative max-h-[90vh] overflow-y-auto">
+            {/* Close Button */}
+            <button
+              onClick={() => setNewComponentModal(null)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full"
+              aria-label="Close modal"
+            >
+              ✕
+            </button>
+
+            {/* Modal Header */}
+            <h2 className="text-2xl md:text-4xl font-bold text-center text-gray-800 mb-6">
+              Add New Component
             </h2>
-            <div className="space-y-4">
-              {Object.keys(newComponentModal.values).length === 0 && (
-                <p className="text-center text-zinc-500 py-2">
-                  Nejsou žádné dostupné hodnoty k změně
+
+            {/* Form Container */}
+            <div className="space-y-6">
+              {/* No Values Message */}
+              {Object.keys(newComponentModal.values).length === 0 ? (
+                <p className="text-center text-gray-500 italic">
+                  No available values to modify.
                 </p>
-              )}
-              {Object.keys(newComponentModal.values).map((key, i) => (
-                <div key={i} className="flex justify-between items-center">
-                  <label
-                    htmlFor={key}
-                    className="text-lg font-medium text-gray-700"
-                  >
-                    {key}
-                  </label>
-                  <input
-                    type="text"
-                    id={key}
-                    className="w-full bg-gray-100 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    onChange={(e) => {
-                      newComponentModal.setValue(key, e.target.value);
-                      setFlag(!flag);
-                    }}
-                    value={newComponentModal.values[key]}
-                  />
+              ) : (
+                <div className="divide-y divide-gray-200">
+                  {Object.keys(newComponentModal.values)
+                    .slice(
+                      currentPage * itemsPerPage,
+                      (currentPage + 1) * itemsPerPage
+                    )
+                    .map((key, i) => (
+                      <div
+                        key={i}
+                        className="flex flex-col md:flex-row justify-between items-center gap-4 py-4"
+                      >
+                        <label
+                          htmlFor={key}
+                          className="text-sm md:text-lg font-medium text-gray-700 w-full md:w-1/3"
+                        >
+                          {key}
+                        </label>
+                        <input
+                          type="text"
+                          id={key}
+                          className="w-full md:w-2/3 bg-gray-100 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                          onChange={(e) => {
+                            newComponentModal.setValue(key, e.target.value);
+                            setFlag(!flag);
+                          }}
+                          value={newComponentModal.values[key]}
+                        />
+                      </div>
+                    ))}
                 </div>
-              ))}
-              {/* add own stylr value */}
+              )}
             </div>
-            <div className="mt-6 flex justify-between">
+
+            {/* Pagination */}
+            {Object.keys(newComponentModal.values).length > itemsPerPage && (
+              <div className="mt-6 flex justify-between items-center">
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 0))
+                  }
+                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg shadow-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                  disabled={currentPage === 0}
+                >
+                  Previous
+                </button>
+                <p className="text-gray-600 text-sm md:text-base">
+                  Page {currentPage + 1} of{" "}
+                  {Math.ceil(
+                    Object.keys(newComponentModal.values).length / itemsPerPage
+                  )}
+                </p>
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) =>
+                      Math.min(
+                        prev + 1,
+                        Math.ceil(
+                          Object.keys(newComponentModal.values).length /
+                            itemsPerPage
+                        ) - 1
+                      )
+                    )
+                  }
+                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg shadow-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                  disabled={
+                    currentPage ===
+                    Math.ceil(
+                      Object.keys(newComponentModal.values).length /
+                        itemsPerPage
+                    ) -
+                      1
+                  }
+                >
+                  Next
+                </button>
+              </div>
+            )}
+
+            {/* Modal Actions */}
+            <div className="mt-8 flex flex-col md:flex-row justify-between gap-4">
               <button
                 onClick={() => {
                   if (selectedComponent) {
@@ -62,13 +135,13 @@ export default function Home() {
                   }
                   setNewComponentModal(null);
                 }}
-                className="px-6 py-2 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
                 Add Component
               </button>
               <button
                 onClick={() => setNewComponentModal(null)}
-                className="px-6 py-2 bg-gray-300 text-gray-800 rounded-lg shadow-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                className="px-6 py-3 bg-gray-300 text-gray-800 rounded-lg shadow-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
               >
                 Cancel
               </button>
@@ -76,6 +149,7 @@ export default function Home() {
           </div>
         </div>
       )}
+
       <div className="w-[300px] min-w-[300px] h-screen bg-gray-200 border-r border-gray-300 flex flex-col">
         <h2 className="text-2xl font-bold p-4">Components</h2>
         {availableComponents.map((category) => (
@@ -129,12 +203,12 @@ export default function Home() {
 function render(
   selectedComponent: AbstractComponent | null,
   setSelectedComponent: (component: AbstractComponent) => void,
-  components: AbstractComponent[],
+  components: AbstractComponent[]
 ) {
   return components.map((comp) => {
     return comp.render(
       setSelectedComponent,
-      selectedComponent ? selectedComponent : undefined,
+      selectedComponent ? selectedComponent : undefined
     );
   });
 }

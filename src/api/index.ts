@@ -27,7 +27,7 @@ export default class API {
   }) {
     try {
       const { data } = await Axios({
-        url: `/${endpoint}`,
+        url: `/api/${endpoint}`,
         method,
         data: body ? body : null,
         headers: {
@@ -52,7 +52,7 @@ export default class API {
 
   async refreshToken() {
     const data = await this.request({
-      endpoint: "/auth/token",
+      endpoint: "/auth/refresh",
       method: "POST",
     });
 
