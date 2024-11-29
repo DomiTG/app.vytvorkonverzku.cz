@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "init": "npm install -d --force && npx prisma db pull && npx prisma generate",
+    "init": "npx prisma db pull && npx prisma generate",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

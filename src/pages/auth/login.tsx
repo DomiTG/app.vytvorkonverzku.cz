@@ -2,7 +2,6 @@ import { useState } from "react";
 import Axios, { AxiosError } from "axios";
 
 export default function LoginPage() {
-
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>();
 
@@ -11,8 +10,8 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    if(loading) return;
-    if(!username || !password) {
+    if (loading) return;
+    if (!username || !password) {
       setError("Please fill out all fields.");
       return;
     }
@@ -26,14 +25,14 @@ export default function LoginPage() {
           password,
         },
       });
-      if(data.success) {
-        window.location.href = "/admin/dashboard";
+      if (data.success) {
+        window.location.href = "/";
       }
       setLoading(false);
-    } catch(err) {
-      if(err instanceof AxiosError) {
+    } catch (err) {
+      if (err instanceof AxiosError) {
         const res = err.response?.data;
-        if(!res) return setError("An unknown error occurred.");
+        if (!res) return setError("An unknown error occurred.");
         setError(res.message);
         setLoading(false);
       } else {
@@ -41,18 +40,18 @@ export default function LoginPage() {
         setLoading(false);
       }
     }
-  }
+  };
 
   return (
     <div className="h-screen w-full flex items-center justify-center bg-gray-100">
       <div className="flex flex-row w-full rounded-lg bg-white overflow-hidden max-w-sm md:max-w-3xl lg:max-w-4xl">
         <div className="flex flex-col w-full lg:w-1/2 p-8">
           <div className="flex flex-col items-start gap-3">
-          {error && (
-            <div className="bg-red-100 border-l-4 border-red-400 text-red-700 px-4 py-3 relative mb-4 w-full">
-              {error}
-            </div>
-          )}
+            {error && (
+              <div className="bg-red-100 border-l-4 border-red-400 text-red-700 px-4 py-3 relative mb-4 w-full">
+                {error}
+              </div>
+            )}
             <p className="text-xs text-gray-400 uppercase">
               E-Shop system Vytvorkonverzku
             </p>

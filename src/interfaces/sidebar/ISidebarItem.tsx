@@ -6,4 +6,5 @@ export default interface ISidebarItem {
   description: string;
   icon: IconType;
   href: string;
+  additional?: boolean;
 }
