@@ -135,14 +135,14 @@ export default function MainLayout({
         </div>
 
         {/* Sidebar for Mobile */}
-        <div className="md:hidden fixed bottom-0 left-0 w-full flex flex-col">
+        <div className="md:hidden fixed bottom-0 left-0 w-full flex flex-col z-[9999]">
           <div className="bg-neutral-800 p-2 text-white flex justify-center items-center border border-neutral-700 w-full">
             <div className="flex flex-row items-center gap-2">
               <FaArrowUp className="text-xl" />
               <p className="text-xs">Click to expand</p>
             </div>
           </div>
-          <div className="bg-neutral-800 text-white  flex justify-evenly py-4">
+          <div className="bg-neutral-800 text-white  flex justify-evenly py-4 z-[9999]">
             {sidebarItems
               .filter((item) => !item.additional)
               .map((val, i) => (

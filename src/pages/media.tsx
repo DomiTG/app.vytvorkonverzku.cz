@@ -10,7 +10,6 @@ export default function MediaPage() {
 
   const [uploadModal, setUploadModal] = useState<boolean>(false);
   const [uploading, setUploading] = useState<boolean>(false);
-  const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [uploadFile, setUploadFile] = useState<File | null>(null);
 
   const handleUpload = async () => {
@@ -65,7 +64,7 @@ export default function MediaPage() {
   return (
     <MainLayout>
       {uploadModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[999999]">
           <div className="bg-white p-4 rounded-lg w-96">
             <h2 className="text-2xl font-semibold border-l-4 border-blue-500 pl-2 uppercase tracking-wider">
               Nahrát média
@@ -100,79 +99,95 @@ export default function MediaPage() {
       <p className="text-gray-500">
         Zde najdeš všechny své obrázky, videa a další média.
       </p>
-      <div className="w-full flex flex-row items-end justify-end gap-4">
-        {/* glass button */}
-        <button
-          className="text-xs font-semibold bg-gray-200 text-gray-700 px-4 py-2 rounded-md uppercase hover:bg-gray-300  cursor-pointer disabled:opacity-50"
-          onClick={() => setUploadModal(true)}
-        >
-          Přidat média
-        </button>
-        <button className="text-xs font-semibold bg-gray-200 text-gray-700 px-4 py-2 rounded-md uppercase hover:bg-gray-300  cursor-pointer disabled:opacity-50">
-          Filtrovat média
-        </button>
+      <div className="w-full flex flex-row justify-between items-center">
+        <p className="text-gray-500 text-xs mt-2">
+          {media ? (
+            <>
+              {convertBytes(media?.stats.used || 0)} z celkových{" "}
+              {convertBytes(media?.stats.max || 0)}, procentuálně jsi využil{" "}
+              {Math.round(
+                ((media?.stats.used || 0) / (media?.stats.max || 0)) * 100
+              )}
+              % místa.
+            </>
+          ) : (
+            "Načítám..."
+          )}
+        </p>
+        <div className=" flex flex-row items-end justify-end gap-4">
+          {/* glass button */}
+          <button
+            className="text-xs font-semibold bg-gray-200 text-gray-700 px-4 py-2 rounded-md uppercase hover:bg-gray-300  cursor-pointer disabled:opacity-50"
+            onClick={() => setUploadModal(true)}
+          >
+            Přidat média
+          </button>
+          <button className="text-xs font-semibold bg-gray-200 text-gray-700 px-4 py-2 rounded-md uppercase hover:bg-gray-300  cursor-pointer disabled:opacity-50">
+            Filtrovat média
+          </button>
+        </div>
       </div>
-      <p className="text-gray-500 text-xs mt-2">
-        {media ? (
-          <>
-            {convertBytes(media?.stats.used || 0)} z celkových{" "}
-            {convertBytes(media?.stats.max || 0)}, procentuálně jsi využil{" "}
-            {Math.round(
-              ((media?.stats.used || 0) / (media?.stats.max || 0)) * 100,
-            )}
-            % místa.
-          </>
-        ) : (
-          "Načítám..."
-        )}
-      </p>
-      <div className="flex flex-row gap-8 mt-4 justify-center flex-wrap">
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 mt-4">
+        {/* Loading placeholders */}
         {loading &&
-          Array.from({ length: 40 }).map((_, i) => (
+          Array.from({ length: 8 }).map((_, i) => (
             <div
               key={i}
-              className="border border-gray-200 w-48 h-48 animate-pulse bg-gray-200"
+              className="bg-gray-200 rounded-lg animate-pulse h-64 w-full"
             ></div>
           ))}
+
+        {/* No media message */}
         {media && media.media.length === 0 && (
-          <div className="w-full text-center text-gray-500">
-            Zatím jsi neuploadnul žádná média.
+          <div className="col-span-full text-center text-gray-500">
+            No media uploaded yet.
           </div>
         )}
+
+        {/* Media items */}
         {media &&
           media.media.length > 0 &&
-          media.media.map((image, i) => {
-            return (
-              <div
-                key={image.id}
-                className="border border-gray-200 w-48 h-64 overflow-hidden rounded-lg flex flex-col"
-              >
+          media.media.map((item) => (
+            <div
+              key={item.id}
+              className="bg-white rounded-lg overflow-hidden transform transition-all hover:scale-105 cursor-pointer"
+            >
+              {item.type === "VIDEO" && (
+                <video
+                  src={item.url}
+                  className="w-full h-40 object-cover"
+                  crossOrigin="anonymous"
+                  controls
+                />
+              )}
+              {item.type === "IMAGE" && (
                 <img
-                  src={image.url}
-                  alt={image.name}
-                  className="w-full h-48 object-cover"
+                  src={item.url}
+                  alt={item.name}
+                  className="w-full h-40 object-cover"
                   crossOrigin="anonymous"
                 />
-                <div className="bg-white w-full items-center justify-center text-center p-2">
-                  <div className="flex flex-row justify-between px-2 pt-2 items-center">
-                    <p className="text-xs font-semibold truncate">
-                      {image.name}
-                    </p>
-                    <span className="text-gray-500 text-xs">
-                      {image.type === "IMAGE"
-                        ? "Obrázek"
-                        : image.type === "VIDEO"
-                          ? "Video"
-                          : "Neznámý"}
-                    </span>
-                  </div>
-                  <span className="text-gray-500 text-xs">
-                    {new Date(image.created_at).toLocaleString()}
+              )}
+              <div className="p-3">
+                <div className="flex justify-between items-center mb-1">
+                  <h3 className="text-sm font-semibold text-gray-800 truncate">
+                    {item.name}
+                  </h3>
+                  <span className="text-xs text-gray-500">
+                    {item.type === "IMAGE"
+                      ? "Image"
+                      : item.type === "VIDEO"
+                      ? "Video"
+                      : "Unknown"}
                   </span>
                 </div>
+                <p className="text-xs text-gray-500">
+                  {new Date(item.created_at).toLocaleString()}
+                </p>
               </div>
-            );
-          })}
+            </div>
+          ))}
       </div>
     </MainLayout>
   );
