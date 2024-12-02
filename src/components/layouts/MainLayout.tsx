@@ -8,8 +8,10 @@ import { MdPermMedia } from "react-icons/md";
 export default function MainLayout({
   children,
   additionalItems,
+  sidebarShrink,
 }: {
   additionalItems?: Array<ISidebarItem>;
+  sidebarShrink?: boolean;
   children: React.ReactNode;
 }) {
   const { user, loading } = useUser();

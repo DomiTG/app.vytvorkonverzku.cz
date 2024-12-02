@@ -13,6 +13,7 @@ export class APIError extends Error {
 
 export default class API {
   accessToken?: string;
+  cdnUrl: string = "https://cdn.vytvorkonverzku.cz";
 
   async request({
     endpoint,
@@ -32,7 +33,7 @@ export default class API {
         data: body ? body : null,
         headers: {
           ...headers,
-          "authorization": `Bearer ${this.accessToken}`,
+          authorization: `Bearer ${this.accessToken}`,
         },
         withCredentials: true,
       });
@@ -69,5 +70,53 @@ export default class API {
     return data;
   }
 
+  // Cdn Routes
+  async uploadImage(file: File) {
+    try {
+      const formData = new FormData();
+      formData.append("media", file);
 
+      const { data } = await Axios({
+        url: `${this.cdnUrl}/upload`,
+        method: "POST",
+        data: formData,
+        headers: {
+          authorization: `Bearer ${this.accessToken}`,
+        },
+      });
+
+      return data;
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        throw new APIError(
+          err.response?.status || 500,
+          err.response?.data.message || "An error occurred",
+        );
+      } else {
+        throw new APIError(500, "An error occurred");
+      }
+    }
+  }
+
+  async getMedia() {
+    try {
+      const { data } = await Axios({
+        url: `${this.cdnUrl}`,
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${this.accessToken}`,
+        },
+      });
+      return data;
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        throw new APIError(
+          err.response?.status || 500,
+          err.response?.data.message || "An error occurred",
+        );
+      } else {
+        throw new APIError(500, "An error occurred");
+      }
+    }
+  }
 }

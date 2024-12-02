@@ -2,16 +2,38 @@ import { ReactNode, useState } from "react";
 import MainLayout from "./MainLayout";
 import ISidebarItem from "@/interfaces/sidebar/ISidebarItem";
 import { FaHome } from "react-icons/fa";
+import { GrDomain } from "react-icons/gr";
 
-export default function ConverseLayout({ children }: { children: ReactNode }) {
+export default function ConverseLayout({
+  converse_id,
+  siderbarShrink,
+  children,
+}: {
+  converse_id: number;
+  siderbarShrink: boolean;
+  children: ReactNode;
+}) {
   const [additionalItems, setAdditionalItems] = useState<ISidebarItem[]>([
     {
       name: "Main",
       description: "Main",
       icon: FaHome,
-      href: "/converses",
+      href: "/converses/" + converse_id,
+    },
+    {
+      name: "Domains",
+      description: "Propojené domény",
+      icon: GrDomain,
+      href: "/converses/" + converse_id + "/domains",
     },
   ]);
 
-  return <MainLayout additionalItems={additionalItems}>{children}</MainLayout>;
+  return (
+    <MainLayout
+      additionalItems={additionalItems}
+      sidebarShrink={siderbarShrink}
+    >
+      {children}
+    </MainLayout>
+  );
 }

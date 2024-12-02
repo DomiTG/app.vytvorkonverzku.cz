@@ -1,64 +1,10 @@
 import MainLayout from "@/components/layouts/MainLayout";
 import { useUser } from "@/contexts/UserContext";
-import ISidebarItem from "@/interfaces/sidebar/ISidebarItem";
 import { useEffect, useState } from "react";
-import { FaCogs, FaHome } from "react-icons/fa";
-import { FaNewspaper } from "react-icons/fa6";
-import { MdPermMedia } from "react-icons/md";
+import { FaHome } from "react-icons/fa";
 
-export default function DashboardPage({
-  version,
-  isDev,
-}: {
-  version: string;
-  isDev: boolean;
-}) {
+export default function DashboardPage() {
   const { user, loading } = useUser();
-  const [sidebarItems, setSidebarItems] = useState<Array<ISidebarItem>>([
-    {
-      name: "Dashboard",
-      description: "All the important stuff",
-      icon: FaHome,
-      href: "/admin/dashboard",
-    },
-    {
-      name: "Media",
-      description: "List and upload media",
-      icon: MdPermMedia,
-      href: "/admin/media",
-    },
-    {
-      name: "Conversion pages",
-      description: "Manage conversion pages",
-      icon: FaNewspaper,
-      href: "/admin/editor",
-    },
-    {
-      name: "Settings",
-      description: "Manage settings",
-      icon: FaCogs,
-      href: "/admin/settings",
-    },
-  ]);
-
-  useEffect(() => {
-    if (!user && !loading) {
-      window.location.href = "/auth/login";
-    }
-  }, [user, loading]);
-
-  if (!user) return <div>Loading...</div>;
-
-  const handleLogout = async () => {
-    try {
-      const result = await user.api.logOut();
-      if (result.success) {
-        window.location.href = "/auth/login";
-      }
-    } catch (err) {
-      console.log("Could not logout", err);
-    }
-  };
 
   return (
     <MainLayout>
@@ -70,7 +16,7 @@ export default function DashboardPage({
               Vytvorkonverzku
             </h1>
             <p className="text-white text-sm md:text-md max-w-md">
-              Welcome <strong>{user.username}</strong> to{" "}
+              Welcome <strong>{user?.username}</strong> to{" "}
               <strong>Vytvorkonverzku</strong>! This is a dashboard where you
               can manage your website.
             </p>
