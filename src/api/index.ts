@@ -70,6 +70,22 @@ export default class API {
     return data;
   }
 
+  async getConverses() {
+    const data = await this.request({
+      endpoint: "/converses",
+      method: "GET",
+    });
+    return data;
+  }
+
+  async getTemplates() {
+    const data = await this.request({
+      endpoint: "/templates",
+      method: "GET",
+    });
+    return data;
+  }
+
   // Cdn Routes
   async uploadImage(file: File) {
     try {
