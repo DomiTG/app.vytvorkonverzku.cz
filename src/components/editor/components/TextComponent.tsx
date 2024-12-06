@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import IEditorComponent from "../classes/IEditorComponent";
+import { CiText } from "react-icons/ci";
 
 export default class TextComponent extends IEditorComponent {
   constructor() {
-    super("text", "text", "text");
+    super("text", "text", "text", CiText);
   }
 
   render() {

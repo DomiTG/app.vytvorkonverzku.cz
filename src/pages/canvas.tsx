@@ -4,7 +4,7 @@ import MainLayout from "@/components/layouts/MainLayout";
 
 export default function CanvasPage() {
   return (
-    <MainLayout>
+    <MainLayout childPaddingDisabled>
       <EditorCanvas
         initialPages={[
           {

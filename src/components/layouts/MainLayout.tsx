@@ -9,10 +9,12 @@ export default function MainLayout({
   children,
   additionalItems,
   sidebarShrink,
+  childPaddingDisabled,
 }: {
   additionalItems?: Array<ISidebarItem>;
   sidebarShrink?: boolean;
   children: React.ReactNode;
+  childPaddingDisabled?: boolean;
 }) {
   const { user, loading } = useUser();
   const [sidebarItems, setSidebarItems] = useState<Array<ISidebarItem>>([
@@ -163,7 +165,9 @@ export default function MainLayout({
           </div>
         </div>
         {/* Main Content */}
-        <div className="flex-1 p-8 bg-gray-100 w-full overflow-y-auto">
+        <div
+          className={`flex-1 ${!childPaddingDisabled ? "p-8" : "p-2"} bg-gray-100 w-full overflow-y-auto`}
+        >
           {children}
         </div>
       </div>
