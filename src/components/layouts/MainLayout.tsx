@@ -166,7 +166,7 @@ export default function MainLayout({
         </div>
         {/* Main Content */}
         <div
-          className={`flex-1 ${!childPaddingDisabled ? "p-8" : "p-2"} bg-gray-100 w-full overflow-y-auto`}
+          className={`flex-1 ${!childPaddingDisabled ? "p-8" : "p-0"} bg-gray-100 w-full overflow-y-auto`}
         >
           {children}
         </div>

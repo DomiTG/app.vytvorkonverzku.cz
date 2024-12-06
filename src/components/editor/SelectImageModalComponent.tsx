@@ -1,15 +1,17 @@
 import { useEffect } from "react";
 import IEditorComponent from "./classes/IEditorComponent";
 import RootComponent from "./components/RootComponent";
+import IMediaAttachment from "@/interfaces/IMediaAttachment";
+import Image from "next/image";
 
 export default function EditorModalComponent({
-  rootComponent,
   component,
+  media,
   setModal,
 }: {
-  rootComponent?: RootComponent;
   component: IEditorComponent;
-  setModal: (comp: IEditorComponent | null) => void;
+  media: IMediaAttachment[];
+  setModal: (component: IEditorComponent | null) => void;
 }) {
   useEffect(() => {
     const keyHandler = (e: KeyboardEvent) => {
@@ -55,38 +57,22 @@ export default function EditorModalComponent({
 
         {/* Content */}
         <div className="flex flex-col items-center justify-center p-4 gap-4 max-h-[50vh] overflow-y-auto">
-          {rootComponent &&
-            rootComponent.availableComponents.map((category, i) => (
-              <div key={i} className="w-full">
-                <h4
+          {component && (
+            <div className="flex flex-row items-center justify-center flex-wrap gap-4 w-full">
+              {media.map((media, i) => (
+                <button
                   key={i}
-                  className="text-lg font-semibold w-full uppercase tracking-widest"
+                  className="w-28 h-28 flex flex-col items-center justify-center border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                 >
-                  {category.category}
-                </h4>
-                <div className="flex flex-row items-center justify-center flex-wrap gap-4">
-                  {category.components.map((comp, j) => (
-                    <button
-                      key={i}
-                      onClick={() => {
-                        const compp = comp.clone();
-                        compp.setRootComponent(rootComponent);
-                        component.addSubComponent(compp);
-                        setModal(null);
-                      }}
-                      className="w-28 h-28 flex flex-col items-center justify-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                    >
-                      {comp.icon && (
-                        <comp.icon className="text-xl text-blue-500" />
-                      )}
-                      <span className="text-gray-700 font-semibold mt-2 uppercase text-sm">
-                        {comp.name}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ))}
+                  <Image
+                    src={media.url}
+                    alt={media.name}
+                    className="w-full h-full object-cover rounded-lg"
+                />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

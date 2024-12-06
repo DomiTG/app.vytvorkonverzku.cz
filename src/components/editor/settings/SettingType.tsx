@@ -13,4 +13,5 @@ export default interface SettingType {
     | "VIDEO"
     | "UNKNOWN";
   value: string | number | boolean | IMediaAttachment | null;
+  options?: { id: string; name: string }[];
 }

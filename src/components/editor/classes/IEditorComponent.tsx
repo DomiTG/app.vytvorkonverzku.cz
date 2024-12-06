@@ -90,7 +90,6 @@ export default abstract class IEditorComponent {
       return this.setModal;
     }
     if (!this.rootComponent) {
-      console.log("null");
       return () => {};
     }
     return this.rootComponent.setModal;
@@ -101,7 +100,6 @@ export default abstract class IEditorComponent {
       return this.setSelectedComponent;
     }
     if (!this.rootComponent) {
-      console.log("null");
       return () => {};
     }
     return this.rootComponent.setSelectedComponent;
@@ -118,7 +116,6 @@ export default abstract class IEditorComponent {
       return this.setHoveredComponent;
     }
     if (!this.rootComponent) {
-      console.log("null");
       return () => {};
     }
     return this.rootComponent.setHoveredComponent;
@@ -126,6 +123,16 @@ export default abstract class IEditorComponent {
 
   setHoveredComponentState(component: IEditorComponent | null): void {
     this.hoveredComponent = component;
+  }
+
+  getHoveredComponentState(): IEditorComponent | null {
+    if(this.rootComponent === this) {
+      return this.hoveredComponent || null;
+    }
+    if(!this.rootComponent) {
+      return null;
+    }
+    return this.rootComponent.hoveredComponent || null;
   }
 
   abstract render(): JSX.Element;
