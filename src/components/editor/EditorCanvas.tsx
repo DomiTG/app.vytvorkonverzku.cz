@@ -86,7 +86,7 @@ export default function EditorCanvas({
       )}
       {/* sidebar */}
       {selectedComponent && (
-        <div className="relative w-[250px] bg-neutral-800 h-full">
+        <div className="relative w-[250px] bg-neutral-800 h-full resize">
           <div className="p-4 border-b border-neutral-700 flex flex-row justify-between items-center">
             <h1 className="text-xl font-semibold text-neutral-100">
               Settings
