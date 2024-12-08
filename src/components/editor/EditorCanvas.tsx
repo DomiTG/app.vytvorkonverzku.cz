@@ -6,6 +6,7 @@ import EditorModalComponent from "./EditorModalComponent";
 import { FaTimes } from "react-icons/fa";
 import IMediaAttachment from "@/interfaces/IMediaAttachment";
 import { useUser } from "@/contexts/UserContext";
+import SelectImageModalComponent from "./SelectImageModalComponent";
 
 export default function EditorCanvas({
   initialPages,
@@ -23,6 +24,7 @@ export default function EditorCanvas({
   const [modal, setModal] = useState<IEditorComponent | null>(null);
 
   const [media, setMedia] = useState<IMediaAttachment[]>([]);
+  const [mediaModal, setMediaModal] = useState<{ component: IEditorComponent | null; setting_name: string }>();
 
   const [selectedComponent, setSelectedComponent] =
     useState<IEditorComponent | null>(null);
@@ -64,6 +66,14 @@ export default function EditorCanvas({
           component={modal}
           setModal={setModal}
           rootComponent={selectedPage.root_component as RootComponent}
+        />
+      )}
+      {mediaModal && selectedComponent && (
+        <SelectImageModalComponent
+          component={selectedComponent}
+          media={media.filter((med) => med.type === "IMAGE")}
+          setModal={setMediaModal}
+          setting_name={mediaModal.setting_name}
         />
       )}
       <div className="flex flex-row h-full">
@@ -164,22 +174,9 @@ export default function EditorCanvas({
                   />
                 )}
                 {setting.type === "IMAGE" && (
-                  <select
-                    className="mt-1 p-2 bg-neutral-700 text-neutral-100 rounded-md"
-                    value={setting.value as string}
-                    onChange={(e) => {
-                      setting.value = e.target.value;
-                      console.log(setting.value);
-                      toggle();
-                    }}
-                  >
-                    <option value="">Select Image</option>
-                    {media.map((media, i) => (
-                      <option key={i} value={media.url}>
-                        {media.name}
-                      </option>
-                    ))}
-                  </select>
+                  <button className="p-2 bg-neutral-700 text-neutral-100 font-semibold" onClick={() => setMediaModal({ component: selectedComponent, setting_name: setting.id })}>
+                    Select IMAGE
+                  </button>
                 )}
               </div>
             ))}

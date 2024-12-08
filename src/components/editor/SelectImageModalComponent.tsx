@@ -1,22 +1,24 @@
-import { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import IEditorComponent from "./classes/IEditorComponent";
 import RootComponent from "./components/RootComponent";
 import IMediaAttachment from "@/interfaces/IMediaAttachment";
 import Image from "next/image";
 
-export default function EditorModalComponent({
+export default function SelectImageModalComponent({
   component,
   media,
   setModal,
+  setting_name
 }: {
   component: IEditorComponent;
   media: IMediaAttachment[];
-  setModal: (component: IEditorComponent | null) => void;
+  setModal: Dispatch<SetStateAction<{ component: IEditorComponent | null; setting_name: string; } | undefined>>
+  setting_name: string;
 }) {
   useEffect(() => {
     const keyHandler = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setModal(null);
+        setModal(undefined);
       }
     };
     window.addEventListener("keydown", keyHandler);
@@ -24,6 +26,8 @@ export default function EditorModalComponent({
       window.removeEventListener("keydown", keyHandler);
     };
   }, []);
+
+  const setting = component.settings.find((settings) =>settings.id === setting_name)!;
 
   return (
     <div className="absolute inset-0 bg-black bg-opacity-60 flex justify-center items-center z-[50] transition-opacity duration-300">
@@ -34,7 +38,7 @@ export default function EditorModalComponent({
             Přidat komponentu - {component.name}
           </h2>
           <button
-            onClick={() => setModal(null)}
+            onClick={() => setModal(undefined)}
             className="text-gray-500 hover:text-gray-800 focus:outline-none"
             aria-label="Close Modal"
           >
@@ -63,11 +67,14 @@ export default function EditorModalComponent({
                 <button
                   key={i}
                   className="w-28 h-28 flex flex-col items-center justify-center border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  onClick={() => setting.value = media.url}
                 >
                   <Image
                     src={media.url}
                     alt={media.name}
                     className="w-full h-full object-cover rounded-lg"
+                    width={400}
+                    height={200}
                 />
                 </button>
               ))}

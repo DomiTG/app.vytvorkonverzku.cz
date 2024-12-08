@@ -17,6 +17,8 @@ export default abstract class IEditorComponent {
   hoveredComponent?: IEditorComponent | null;
   setHoveredComponent!: (component: IEditorComponent | null) => void;
 
+  responsivitySettings: SettingType[] = [];
+
   constructor(
     name: string,
     description: string,

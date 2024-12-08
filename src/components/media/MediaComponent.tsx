@@ -1,4 +1,5 @@
 import IMediaAttachment from "@/interfaces/IMediaAttachment";
+import Image from "next/image";
 import { useState } from "react";
 
 export default function MediaComponent({ item }: { item: IMediaAttachment }) {
@@ -53,12 +54,14 @@ export default function MediaComponent({ item }: { item: IMediaAttachment }) {
         />
       )}
       {item.type === "IMAGE" && (
-        <img
+        <Image
           src={item.url}
           alt={item.name}
           className="w-full h-40 object-cover"
           crossOrigin="anonymous"
           loading="lazy"
+          width={400}
+          height={200}
         />
       )}
       <div className="p-3">

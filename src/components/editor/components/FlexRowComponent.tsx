@@ -56,7 +56,7 @@ export default class FlexComponent extends IEditorComponent {
     const subCompLength = this.subComponents.length;
     return (
       <div
-        className={`relative w-full flex  items-center ${subCompLength === 0 && "p-4"} p-1 hover:border border-gray-700`}
+        className={`relative w-full flex  items-center ${subCompLength === 0 && "p-4"} p-1 hover:border border-gray-700 hover:p-4`}
         style={{
           justifyContent: this.getSetting("justify")?.value as string || "flex-start",
           alignItems: this.getSetting("align")?.value as string || "flex-start",
