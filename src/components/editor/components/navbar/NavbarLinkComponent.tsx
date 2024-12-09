@@ -10,18 +10,21 @@ export default class NavbarLinkComponent extends IEditorComponent {
         name: "Text",
         type: "TEXT",
         value: "Link",
+        visible: true,
       },
       {
         id: "link",
         name: "Link",
         type: "TEXT",
         value: "#",
+        visible: true,
       },
       {
         id: "text-color",
         name: "Text Color",
         type: "COLOR",
         value: "#000000",
+        visible: true,
       },
     ]);
   }

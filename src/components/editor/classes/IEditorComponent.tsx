@@ -128,15 +128,14 @@ export default abstract class IEditorComponent {
   }
 
   getHoveredComponentState(): IEditorComponent | null {
-    if(this.rootComponent === this) {
+    if (this.rootComponent === this) {
       return this.hoveredComponent || null;
     }
-    if(!this.rootComponent) {
+    if (!this.rootComponent) {
       return null;
     }
     return this.rootComponent.hoveredComponent || null;
   }
-
   abstract render(): JSX.Element;
   abstract clone(): IEditorComponent;
 }

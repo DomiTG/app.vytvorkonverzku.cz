@@ -3,6 +3,7 @@ import IMediaAttachment from "@/interfaces/IMediaAttachment";
 export default interface SettingType {
   id: string;
   name: string;
+  visible: boolean;
   type:
     | "TEXT"
     | "NUMBER"
@@ -11,7 +12,10 @@ export default interface SettingType {
     | "COLOR"
     | "IMAGE"
     | "VIDEO"
-    | "UNKNOWN";
+    | "RANGE"
+    | "UNKNOWN"
+    | "CODE"
+    | "TEXTAREA";
   value: string | number | boolean | IMediaAttachment | null;
   options?: { id: string; name: string }[];
 }

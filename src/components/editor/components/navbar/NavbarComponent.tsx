@@ -1,9 +1,7 @@
-import { CiTextAlignCenter } from "react-icons/ci";
 import IEditorComponent from "../../classes/IEditorComponent";
 import { TbLayoutNavbar } from "react-icons/tb";
 import RootComponent from "../RootComponent";
 import FloatingAddCompComponent from "../../FloatingAddCompComponent";
-import FlexRowComponent from "../FlexRowComponent";
 
 export default class NavbarComponent extends IEditorComponent {
   initialized: boolean = false;
@@ -20,6 +18,7 @@ export default class NavbarComponent extends IEditorComponent {
           name: "Background",
           type: "COLOR",
           value: "#ffffff",
+          visible: true,
         },
         {
           id: "test array",
@@ -31,8 +30,9 @@ export default class NavbarComponent extends IEditorComponent {
             { id: "2", name: "Option 2" },
             { id: "3", name: "Option 3" },
           ],
+          visible: true,
         },
-      ]
+      ],
     );
   }
 
@@ -61,7 +61,12 @@ export default class NavbarComponent extends IEditorComponent {
       const ltfcJustifySetting = logoTitleFlexColComp.getSetting("justify");
       const ltfcDirectionSetting = logoTitleFlexColComp.getSetting("direction");
       const ltfcGapSetting = logoTitleFlexColComp.getSetting("gap");
-      if (!ltfcAlignSetting || !ltfcJustifySetting || !ltfcDirectionSetting || !ltfcGapSetting)
+      if (
+        !ltfcAlignSetting ||
+        !ltfcJustifySetting ||
+        !ltfcDirectionSetting ||
+        !ltfcGapSetting
+      )
         return <div>Settings not found</div>;
       ltfcAlignSetting.value = "center";
       ltfcJustifySetting.value = "start";
@@ -73,9 +78,6 @@ export default class NavbarComponent extends IEditorComponent {
       const textComp = rootComp.getComponentById("text");
       if (!textComp) return <div>Text comp not found</div>;
       const textCompC = textComp.clone();
-      const textSetting = textCompC.getSetting("text");
-      if (!textSetting) return <div>Text setting not found</div>;
-      textSetting.value = "Logo";
       textCompC.setRootComponent(rootComp);
 
       //logo
@@ -88,7 +90,7 @@ export default class NavbarComponent extends IEditorComponent {
       const heightSetting = imageCompC.getSetting("height");
       if (!imageSetting || !altSetting || !widthSetting || !heightSetting)
         return <div>Settings not found</div>;
-      imageSetting.value = "https://cdn.vytvorkonverzku.cz/4/fon5yfa56b5"
+      imageSetting.value = "https://cdn.vytvorkonverzku.cz/4/fon5yfa56b5";
       altSetting.value = "Logo";
       widthSetting.value = "50";
       heightSetting.value = "50";

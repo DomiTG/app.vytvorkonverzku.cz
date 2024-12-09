@@ -10,42 +10,47 @@ export default class ImageElement extends IEditorComponent {
         name: "Select Image",
         type: "IMAGE",
         value: null,
+        visible: true,
       },
       {
         id: "alt",
         name: "Alt Text",
         type: "TEXT",
         value: "Image",
+        visible: true,
       },
       {
         id: "width",
         name: "Width",
         type: "NUMBER",
         value: 600,
+        visible: true,
       },
       {
         id: "height",
         name: "Height",
         type: "NUMBER",
         value: 400,
+        visible: true,
       },
       {
         id: "rounded",
         name: "Rounded",
         type: "BOOLEAN",
         value: false,
-      }
+        visible: true,
+      },
     ]);
   }
 
   render() {
     return (
       <Image
-        src={this.getSetting("image")?.value as string || ""}
-        width={this.getSetting("width")?.value as number || 600}
-        height={this.getSetting("height")?.value as number || 400}
+        src={(this.getSetting("image")?.value as string) || ""}
+        width={(this.getSetting("width")?.value as number) || 600}
+        height={(this.getSetting("height")?.value as number) || 400}
         crossOrigin="anonymous"
-        alt={this.getSetting("alt")?.value as string || "Image"}
+        alt={(this.getSetting("alt")?.value as string) || "Image"}
         className={`hover:border border-gray-700 object-cover ${this.getSetting("rounded")?.value ? "rounded-lg" : ""}`}
         onMouseEnter={() => this.getHoveredComponentMethod()(this)}
         onMouseLeave={() => this.getHoveredComponentMethod()(null)}
@@ -53,7 +58,10 @@ export default class ImageElement extends IEditorComponent {
           e.preventDefault();
           this.getSelectedComponentMethod()(this);
         }}
-        style={{ width: this.getSetting("width")?.value as number || 600, height: this.getSetting("height")?.value as number || 400 }}
+        style={{
+          width: (this.getSetting("width")?.value as number) || 600,
+          height: (this.getSetting("height")?.value as number) || 400,
+        }}
       />
     );
   }

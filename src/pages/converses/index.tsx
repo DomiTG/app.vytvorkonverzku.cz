@@ -1,6 +1,7 @@
 import MainLayout from "@/components/layouts/MainLayout";
 import { useUser } from "@/contexts/UserContext";
 import IConverse from "@/interfaces/IConverse";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -65,9 +66,12 @@ export default function ConversesListPage() {
         </div>
       )}
       <div className="flex flex-row justify-end gap-4 items-center mt-4">
-        <button className="px-4 py-2 text-xs font-bold text-white bg-blue-500 hover:bg-blue-600 rounded-lg transition-all uppercase">
+        <Link
+          className="px-4 py-2 text-xs font-bold text-white bg-blue-500 hover:bg-blue-600 rounded-lg transition-all uppercase"
+          href="/converses/create"
+        >
           Vytvořit konverzku
-        </button>
+        </Link>
       </div>
     </MainLayout>
   );
