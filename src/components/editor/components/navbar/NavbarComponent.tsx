@@ -150,6 +150,20 @@ export default class NavbarComponent extends IEditorComponent {
     );
   }
 
+  productionRender(): JSX.Element {
+    return (
+      <nav
+        className="relative border-b border-gray-200 p-2 w-full"
+        style={{
+          backgroundColor:
+            (this.getSetting("color")?.value as string) || "#ffffff",
+        }}
+      >
+        {this.subComponents.map((component) => component.productionRender())}
+      </nav>
+    );
+  }
+
   clone() {
     const clone = new NavbarComponent();
     return clone;

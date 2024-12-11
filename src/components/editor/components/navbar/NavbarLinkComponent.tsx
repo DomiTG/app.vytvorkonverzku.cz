@@ -49,6 +49,20 @@ export default class NavbarLinkComponent extends IEditorComponent {
     );
   }
 
+  productionRender(): JSX.Element {
+    return (
+      <a
+        className="text-gray-800 text-lg font-medium"
+        href={(this.getSetting("link")?.value as string) || "#"}
+        style={{
+          color: (this.getSetting("text-color")?.value as string) || "#000000",
+        }}
+      >
+        {(this.getSetting("text")?.value as string) || "Link"}
+      </a>
+    );
+  }
+
   clone() {
     return new NavbarLinkComponent();
   }

@@ -51,7 +51,9 @@ export default class ImageElement extends IEditorComponent {
         height={(this.getSetting("height")?.value as number) || 400}
         crossOrigin="anonymous"
         alt={(this.getSetting("alt")?.value as string) || "Image"}
-        className={`hover:border border-gray-700 object-cover ${this.getSetting("rounded")?.value ? "rounded-lg" : ""}`}
+        className={`hover:border border-gray-700 object-cover ${
+          this.getSetting("rounded")?.value ? "rounded-lg" : ""
+        }`}
         onMouseEnter={() => this.getHoveredComponentMethod()(this)}
         onMouseLeave={() => this.getHoveredComponentMethod()(null)}
         onClick={(e) => {
@@ -61,6 +63,26 @@ export default class ImageElement extends IEditorComponent {
         style={{
           width: (this.getSetting("width")?.value as number) || 600,
           height: (this.getSetting("height")?.value as number) || 400,
+        }}
+      />
+    );
+  }
+
+  productionRender(): JSX.Element {
+    return (
+      <Image
+        src={(this.getSetting("image")?.value as string) || ""}
+        width={(this.getSetting("width")?.value as number) || 600}
+        height={(this.getSetting("height")?.value as number) || 400}
+        crossOrigin="anonymous"
+        alt={(this.getSetting("alt")?.value as string) || "Image"}
+        className={`object-cover ${
+          this.getSetting("rounded")?.value ? "rounded-lg" : ""
+        }`}
+        style={{
+          width: (this.getSetting("width")?.value as number) || 600,
+          height: (this.getSetting("height")?.value as number) || 400,
+          objectFit: "cover",
         }}
       />
     );

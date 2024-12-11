@@ -27,6 +27,18 @@ export default class OwnHTMLElement extends IEditorComponent {
     );
   }
 
+  productionRender(): JSX.Element {
+    return (
+      <div
+        dangerouslySetInnerHTML={{
+          __html:
+            this.getSetting("html_code")?.value ||
+            `<p class="text-gray-500">My own HTML code!</p>`,
+        }}  
+      />
+    );
+  }
+
   clone() {
     return new OwnHTMLElement();
   }

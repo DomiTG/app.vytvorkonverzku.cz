@@ -109,6 +109,33 @@ export default class FlexComponent extends IEditorComponent {
     );
   }
 
+  productionRender(): JSX.Element {
+    return (
+      <div
+        className="relative w-full flex items-center"
+        style={{
+          justifyContent:
+            (this.getSetting("justify")?.value as string) || "flex-start",
+          alignItems:
+            (this.getSetting("align")?.value as string) || "flex-start",
+          flexDirection:
+            (this.getSetting("direction")?.value as
+              | "row"
+              | "row-reverse"
+              | "column"
+              | "column-reverse") || "row",
+          gap: (this.getSetting("gap")?.value as number) || 0,
+          padding: `${(this.getSetting("padding")?.value as number)+5 || 0}px`,
+          backgroundColor:
+            (this.getSetting("backgroundColor")?.value as string) ||
+            "transparent",
+        }}
+      >
+        {this.subComponents.map((component) => component.productionRender())}
+      </div>
+    );
+  }
+
   clone() {
     return new FlexComponent();
   }

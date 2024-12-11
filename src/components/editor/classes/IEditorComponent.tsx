@@ -77,6 +77,13 @@ export default abstract class IEditorComponent {
     return this.settings.find((setting) => setting.id === id);
   }
 
+  updateSetting(id: string, value: any): void {
+    const setting = this.getSetting(id);
+    if (setting) {
+      setting.value = value;
+    }
+  }
+
   getUpdateMethod(): (component: IEditorComponent) => void {
     if (this.rootComponent === this) {
       return this.updateMethod;
@@ -136,6 +143,16 @@ export default abstract class IEditorComponent {
     }
     return this.rootComponent.hoveredComponent || null;
   }
+
+  save(): any {
+    return {
+      id: this.id,
+      settings: this.settings.map((setting) => { return { id: setting.id, value: setting.value } }),
+      subComponents: this.subComponents.map((component) => component.save()),
+    }
+  }
+
   abstract render(): JSX.Element;
+  abstract productionRender(): JSX.Element;
   abstract clone(): IEditorComponent;
 }

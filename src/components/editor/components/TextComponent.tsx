@@ -57,6 +57,8 @@ export default class TextComponent extends IEditorComponent {
         id: "line_height",
         name: "Line Height",
         type: "RANGE",
+        rangeMin: -5,
+        rangeMax: 5,
         value: 0,
         visible: true,
       },
@@ -65,6 +67,8 @@ export default class TextComponent extends IEditorComponent {
         name: "Letter Spacing",
         type: "RANGE",
         value: 0,
+        rangeMin: -5,
+        rangeMax: 5,
         visible: true,
       },
       {
@@ -178,7 +182,7 @@ export default class TextComponent extends IEditorComponent {
 
   render() {
     const tag = (this.getSetting("html_tag")?.value || "p") as string;
-    const fontSize = (this.getSetting("text_size")?.value || 15) as number;
+    const fontSize = (this.getSetting("text_size")?.value || 1) as number;
     const htmlContent = (this.getSetting("html_content")?.value ||
       "") as string;
     const textAlign = (this.getSetting("text_align")?.value ||
@@ -193,14 +197,18 @@ export default class TextComponent extends IEditorComponent {
     // Call getHtmlTag to generate the appropriate tag with props
     const tagElement = this.getHtmlTag(tag, {
       contentEditable: true,
-      className: `text-gray-800 text-lg font-medium hover:border hover:border-zinc-700 p-2 text-editable ${textWidth === "full" ? "w-full" : "w-auto"}`,
+      className: `text-gray-800 h-full font-medium hover:border hover:border-zinc-700 p-2 ${
+        textWidth === "full" ? "w-full" : "w-auto"
+      }`,
       style: {
-        fontSize: fontSize + "px",
+        //responsive font size
+        fontSize: fontSize + "rem",
         textAlign: textAlign,
         color: textColor,
-        lineHeight: lineHeight,
+        lineHeight: (fontSize + lineHeight) + "rem",
         letterSpacing: letterSpacing,
         fontFamily: font,
+        height: "100%",
       },
       dangerouslySetInnerHTML: { __html: htmlContent },
       onBlur: (e: any) => {
@@ -265,6 +273,42 @@ export default class TextComponent extends IEditorComponent {
         </div>
       </>
     );
+  }
+
+  productionRender(): JSX.Element {
+    const tag = (this.getSetting("html_tag")?.value || "p") as string;
+    const fontSize = (this.getSetting("text_size")?.value || 1) as number;
+    const htmlContent = (this.getSetting("html_content")?.value ||
+      "") as string;
+    const textAlign = (this.getSetting("text_align")?.value ||
+      "start") as string;
+    const textWidth = (this.getSetting("width")?.value || "full") as string;
+    const textColor = (this.getSetting("color")?.value || "#000") as string;
+    const lineHeight = (this.getSetting("line_height")?.value || 0) as number;
+    const letterSpacing = (this.getSetting("letter_spacing")?.value ||
+      0) as number;
+    const font = this.getSetting("font")?.value || "Arial, sans-serif";
+
+    // Call getHtmlTag to generate the appropriate tag with props
+    const tagElement = this.getHtmlTag(tag, {
+      contentEditable: false,
+      className: `text-gray-800 h-full font-medium p-2 ${
+        textWidth === "full" ? "w-full" : "w-auto"
+      }`,
+      style: {
+        fontSize: fontSize + "rem",
+        textAlign: textAlign,
+        color: textColor,
+        lineHeight: (fontSize + lineHeight) + "rem",
+        letterSpacing: letterSpacing,
+        fontFamily: font,
+        height: "100%",
+      },
+      dangerouslySetInnerHTML: { __html: htmlContent },
+      id: this.randomId,
+    });
+
+    return tagElement as JSX.Element;
   }
 
   clone() {

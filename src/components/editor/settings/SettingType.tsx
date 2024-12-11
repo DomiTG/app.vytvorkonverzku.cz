@@ -17,5 +17,7 @@ export default interface SettingType {
     | "CODE"
     | "TEXTAREA";
   value: string | number | boolean | IMediaAttachment | null;
+  rangeMin?: number;
+  rangeMax?: number;
   options?: { id: string; name: string }[];
 }

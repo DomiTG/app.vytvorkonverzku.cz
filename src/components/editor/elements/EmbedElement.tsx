@@ -80,6 +80,37 @@ export default class EmbedElement extends IEditorComponent {
     );
   }
 
+  productionRender(): JSX.Element {
+    const url = this.getSetting("url")?.value as string;
+    const width = (this.getSetting("width")?.value as number) || 600;
+    const height = (this.getSetting("height")?.value as number) || 400;
+    const rounded = this.getSetting("rounded")?.value as boolean;
+
+    return (
+      <div
+        className={`relative ${
+          rounded ? "rounded-lg" : ""
+        }`}
+        style={{
+          width,
+          height,
+        }}
+      >
+        <iframe
+          src={url || ""}
+          width="100%"
+          height="100%"
+          className={`absolute top-0 left-0 w-full h-full ${
+            rounded ? "rounded-lg" : ""
+          }`}
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      </div>
+    );
+  }
+
   clone() {
     return new EmbedElement();
   }

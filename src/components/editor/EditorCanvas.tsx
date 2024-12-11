@@ -13,16 +13,16 @@ import "prismjs/themes/prism.css";
 import "prismjs/components/prism-jsx";
 
 export default function EditorCanvas({
-  initialPages,
+  selectedPage,
+  productionSee = false,
+  canvasMode = "DESKTOP",
 }: {
-  initialPages: IEditorPage[];
+  selectedPage: IEditorPage | null;
+  productionSee: boolean;
+  canvasMode: "MOBILE" | "DESKTOP" | "TABLET";
 }) {
   const { user } = useUser();
 
-  const [pages, setPages] = useState<IEditorPage[]>(initialPages);
-  const [selectedPage, setSelectedPage] = useState<IEditorPage | null>(
-    initialPages[0],
-  );
   const [updateFlag, setUpdateFlag] = useState<boolean>(false);
   const [modal, setModal] = useState<IEditorComponent | null>(null);
 
@@ -83,16 +83,235 @@ export default function EditorCanvas({
           media_type={mediaModal.media_type}
         />
       )}
-      <div className="flex flex-row h-full">
-        {render(
-          selectedPage,
-          toggle,
-          setModal,
-          setSelectedComponent,
-          setHoveredComponent,
+      {selectedComponent && (
+        <div className="p-6 flex flex-row justify-between items-center bg-neutral-800 w-full gap-8">
+          <div className="flex flex-col max-w-[20%]">
+            <h1 className="text-xl font-semibold text-neutral-100">
+              {selectedComponent.name}
+            </h1>
+            <p className="text-neutral-300 text-xs truncate" title={selectedComponent.description}>
+              {selectedComponent.description}
+            </p>
+          </div>
+          <div className="flex flex-row gap-8 overflow-x-auto h-full text-neutral-100">
+            {selectedComponent.settings.filter((set) => set.visible).map((setting, i) => (
+              <div className="flex flex-col h-full p-2 flex-shrink-0" key={i}>
+                <label className="text-neutral-100 text-xs font-semibold uppercase">
+                  {setting.name}
+                </label>
+                {setting.type === "TEXT" && (
+                  <input
+                    type="text"
+                    className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md min-w-16"
+                    value={setting.value as string}
+                    onChange={(e) => {
+                      setting.value = e.target.value;
+                      toggle();
+                    }}
+                  />
+                )}
+                {setting.type === "TEXTAREA" && (
+                  <textarea
+                    className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md min-w-16"
+                    value={setting.value as string}
+                    onChange={(e) => {
+                      setting.value = e.target.value;
+                      toggle();
+                    }}
+                  />
+                )}
+                {setting.type === "BOOLEAN" && (
+                  <input
+                    type="checkbox"
+                    className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md min-w-16"
+                    checked={setting.value as boolean}
+                    onChange={(e) => {
+                      setting.value = e.target.checked;
+                      toggle();
+                    }}
+                  />
+                )}
+                {setting.type === "SELECT" && (
+                  <select
+                    className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md"
+                    value={setting.value as string}
+                    onChange={(e) => {
+                      setting.value = e.target.value;
+                      toggle();
+                    }}
+                  >
+                    {setting.options &&
+                      setting.options.map((option, i) => (
+                        <option key={i} value={option.id}>
+                          {option.name}
+                        </option>
+                      ))}
+                  </select>
+                )}
+                {setting.type === "RANGE" && (
+                  <input
+                    type="range"
+                    className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md"
+                    value={setting.value as number}
+                    min={setting.rangeMin || 0}
+                    max={setting.rangeMax || 100}
+                    onChange={(e) => {
+                      setting.value = Number(e.target.value);
+                      toggle();
+                    }}
+                  />
+                )}
+                {setting.type === "NUMBER" && (
+                  <input
+                    type="number"
+                    className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md"
+                    value={setting.value as number}
+                    onChange={(e) => {
+                      setting.value = Number(e.target.value);
+                      toggle();
+                    }}
+                  />
+                )}
+                {setting.type === "COLOR" && (
+                  <input
+                    type="color"
+                    className="w-full mt-1 text-xs bg-neutral-700 text-neutral-300 rounded-md h-full p-1"
+                    value={setting.value as string}
+                    onChange={(e) => {
+                      setting.value = e.target.value;
+                      toggle();
+                    }}
+                  />
+                )}
+                {setting.type === "CODE" && (
+                  <Editor
+                    placeholder="Some HTML code here"
+                    value={setting.value as string}
+                    onValueChange={(code: string) => {
+                      setting.value = code;
+                      toggle();
+                    }}
+                    highlight={(code) => highlight(code, languages.jsx!, `jsx`)}
+                    padding={10}
+                    className="bg-neutral-300"
+                  />
+                )}
+                {setting.type === "IMAGE" && (
+                  <button
+                    className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md"
+                    onClick={() =>
+                      setMediaModal({
+                        component: selectedComponent,
+                        setting_name: setting.id,
+                        media_type: "IMAGE",
+                      })
+                    }
+                  >
+                    Select IMAGE
+                  </button>
+                )}
+                {setting.type === "VIDEO" && (
+                  <button
+                    className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md"
+                    onClick={() =>
+                      setMediaModal({
+                        component: selectedComponent,
+                        setting_name: setting.id,
+                        media_type: "VIDEO",
+                      })
+                    }
+                  >
+                    Select VIDEO
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={() => setSelectedComponent(null)}
+            className="text-neutral-100"
+          >
+            <FaTimes />
+          </button>
+        </div>
+      )}
+      <div className="flex flex-row">
+        {canvasMode === "DESKTOP" &&
+          render(
+            selectedPage,
+            toggle,
+            setModal,
+            setSelectedComponent,
+            setHoveredComponent,
+            productionSee
+          )}
+        {canvasMode === "MOBILE" && (
+          <div className="flex justify-center items-center w-full h-full">
+            <div
+              className="relative border border-gray-500 rounded-lg shadow-lg"
+              style={{
+                width: "390px", // Outer device dimensions (slightly larger than the canvas for padding)
+                height: "844px", // Include the device bezel area
+                backgroundColor: "#ffffff",
+                overflow: "hidden", // Ensures nothing spills outside the "screen"
+              }}
+            >
+              <canvas
+                width="375"
+                height="812"
+                className="absolute inset-0"
+                style={{
+                  margin: "auto",
+                  display: "block",
+                  borderRadius: "20px", // Optional: rounded screen corners
+                }}
+              />
+              {render(
+                selectedPage,
+                toggle,
+                setModal,
+                setSelectedComponent,
+                setHoveredComponent,
+                productionSee
+              )}
+            </div>
+          </div>
         )}
+        {canvasMode === "TABLET" && (
+          <div className="flex justify-center items-center w-full">
+            <div
+              className="relative border border-gray-500 rounded-lg shadow-lg"
+              style={{
+                width: "820px", // Outer device dimensions (slightly larger than the canvas for padding)
+                height: "1180px", // Include the device bezel area
+                backgroundColor: "#ffffff",
+                overflow: "hidden", // Ensures nothing spills outside the "screen"
+              }}
+            >
+              <canvas
+                width="768"
+                height="1024"
+                className="absolute inset-0"
+                style={{
+                  margin: "auto",
+                  display: "block",
+                  borderRadius: "20px", // Optional: rounded screen corners
+                }}
+              />
+              {render(
+                selectedPage,
+                toggle,
+                setModal,
+                setSelectedComponent,
+                setHoveredComponent,
+                productionSee
+              )}
+            </div>
+          </div>
+        )}
+
         {/* sidebar */}
-        {selectedComponent && (
+        {/*selectedComponent && (
           <div className="relative w-[250px] bg-neutral-800 h-full resize">
             <div className="p-4 border-b border-neutral-700 flex flex-row justify-between items-center">
               <h1 className="text-xl font-semibold text-neutral-100">
@@ -171,6 +390,8 @@ export default function EditorCanvas({
                         type="range"
                         className="w-full mt-1 p-2 bg-neutral-700 text-neutral-100"
                         value={setting.value as number}
+                        min={setting.rangeMin || 0}
+                        max={setting.rangeMax || 100}
                         onChange={(e) => {
                           setting.value = Number(e.target.value);
                           toggle();
@@ -246,7 +467,7 @@ export default function EditorCanvas({
                 ))}
             </div>
           </div>
-        )}
+        )*/}
       </div>
     </>
   );
@@ -258,21 +479,31 @@ const render = (
   setModal: (component: IEditorComponent) => void,
   setSelectedComponent: (component: IEditorComponent) => void,
   setHoveredComponent: (component: IEditorComponent | null) => void,
+  productionSee: boolean
 ) => {
-  let rootComponent = page.root_component;
+  let rootComponent = page.root_component as RootComponent;
   if (!rootComponent) {
     const rootComp = new RootComponent();
     rootComp.init(
       updateMethod,
       setModal,
       setSelectedComponent,
-      setHoveredComponent,
+      setHoveredComponent
     );
     page.root_component = rootComp;
     rootComponent = rootComp;
+  } else {
+    if(!rootComponent.updateMethod) {
+      rootComponent.init(
+        updateMethod,
+        setModal,
+        setSelectedComponent,
+        setHoveredComponent
+      );
+    }
   }
   const renderComponent = (component: IEditorComponent) => {
-    return component.render();
+    return productionSee ? component.productionRender() : component.render();
   };
   return renderComponent(rootComponent);
 };

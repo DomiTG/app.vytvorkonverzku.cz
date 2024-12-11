@@ -52,7 +52,7 @@ export default class RootComponent extends IEditorComponent {
   render() {
     return (
       <div
-        className="relative w-full h-full flex flex-col hover:border hover:border-gray-500"
+        className="relative w-full flex flex-col hover:border hover:border-gray-500"
         onMouseEnter={() => this.getHoveredComponentMethod()(this)}
         onMouseLeave={() => this.getHoveredComponentMethod()(null)}
       >
@@ -66,6 +66,14 @@ export default class RootComponent extends IEditorComponent {
           </div>
         </div>
       </div>
+    );
+  }
+
+  productionRender(): JSX.Element {
+    return (
+      <>
+        {this.subComponents.map((component) => component.productionRender())}
+      </>
     );
   }
 

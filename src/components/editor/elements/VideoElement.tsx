@@ -65,6 +65,23 @@ export default class VideoElement extends IEditorComponent {
     );
   }
 
+  productionRender(): JSX.Element {
+    return (
+      <video
+        src={(this.getSetting("video")?.value as string) || ""}
+        width={(this.getSetting("width")?.value as number) || 600}
+        height={(this.getSetting("height")?.value as number) || 400}
+        crossOrigin="anonymous"
+        className={`object-cover ${this.getSetting("rounded")?.value ? "rounded-lg" : ""}`}
+        style={{
+          width: (this.getSetting("width")?.value as number) || 600,
+          height: (this.getSetting("height")?.value as number) || 400,
+        }}
+        controls
+      />
+    );
+  }
+
   clone() {
     return new VideoElement();
   }
