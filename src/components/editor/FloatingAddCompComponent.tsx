@@ -3,12 +3,11 @@ import IEditorComponent from "./classes/IEditorComponent";
 
 export default function FloatingAddCompComponent({
   comp,
-  position
+  position,
 }: {
   comp: IEditorComponent;
   position: "top_right" | "top_left" | "bottom_right" | "bottom_left";
 }) {
-  
   const convertPosition = (position: string) => {
     switch (position) {
       case "top_right":
@@ -21,10 +20,12 @@ export default function FloatingAddCompComponent({
         return "bottom-0 left-0";
       default:
     }
-  }
+  };
 
   return (
-    <div className={`flex flex-row absolute ${convertPosition(position)}`}>
+    <div
+      className={`flex flex-row absolute ${convertPosition(position)} z-[9999]`}
+    >
       <button
         className="bg-zinc-200 text-zinc-500 w-6 h-6 flex items-center justify-center hover:bg-zinc-300 focus:outline-none rounded-tl-md rounded-bl-md"
         aria-label="Add Component"

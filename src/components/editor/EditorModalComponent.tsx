@@ -27,7 +27,7 @@ export default function EditorModalComponent({
     <div className="absolute inset-0 bg-black bg-opacity-60 flex justify-center items-center z-[50] transition-opacity duration-300">
       <div className="bg-white w-4/5 md:w-1/3 rounded-lg shadow-lg transform transition-all scale-95 flex flex-col">
         {/* Header */}
-        <div className="flex justify-between items-center border-b border-gray-200 p-4">
+        <div className="w-full h-full flex justify-between items-center border-b border-gray-200 p-4">
           <h2 className="text-lg font-semibold text-gray-800 uppercase">
             Přidat komponentu - {component.name}
           </h2>
@@ -54,14 +54,11 @@ export default function EditorModalComponent({
         </div>
 
         {/* Content */}
-        <div className="flex flex-col items-center justify-center p-4 gap-4 max-h-[50vh] overflow-y-auto">
+        <div className="w-full h-full flex flex-col items-center justify-center p-4 gap-4 max-h-[50vh] overflow-y-auto">
           {rootComponent &&
             rootComponent.availableComponents.map((category, i) => (
-              <div key={i} className="w-full">
-                <h4
-                  key={i}
-                  className="text-lg font-semibold w-full uppercase tracking-widest"
-                >
+              <div key={i} className="w-full h-full">
+                <h4 className="text-lg font-semibold w-full uppercase tracking-widest">
                   {category.category}
                 </h4>
                 <div className="flex flex-row items-center justify-center flex-wrap gap-4">

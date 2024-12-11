@@ -9,7 +9,6 @@ import { useUser } from "@/contexts/UserContext";
 import SelectImageModalComponent from "./SelectImageModalComponent";
 import Editor from "react-simple-code-editor";
 import { highlight, languages } from "prismjs";
-import { stringify } from "flatted";
 import "prismjs/themes/prism.css";
 import "prismjs/components/prism-jsx";
 
@@ -31,6 +30,7 @@ export default function EditorCanvas({
   const [mediaModal, setMediaModal] = useState<{
     component: IEditorComponent | null;
     setting_name: string;
+    media_type: "IMAGE" | "VIDEO";
   }>();
 
   const [selectedComponent, setSelectedComponent] =
@@ -77,9 +77,10 @@ export default function EditorCanvas({
       {mediaModal && selectedComponent && (
         <SelectImageModalComponent
           component={selectedComponent}
-          media={media.filter((med) => med.type === "IMAGE")}
+          media={media.filter((med) => med.type === mediaModal.media_type)}
           setModal={setMediaModal}
           setting_name={mediaModal.setting_name}
+          media_type={mediaModal.media_type}
         />
       )}
       <div className="flex flex-row h-full">
@@ -187,13 +188,6 @@ export default function EditorCanvas({
                         }}
                       />
                     )}
-                    {setting.type === "VIDEO" && (
-                      <input
-                        type="file"
-                        accept="video/*"
-                        className="mt-1 p-2 bg-neutral-700 text-neutral-100"
-                      />
-                    )}
                     {setting.type === "COLOR" && (
                       <input
                         type="color"
@@ -227,10 +221,25 @@ export default function EditorCanvas({
                           setMediaModal({
                             component: selectedComponent,
                             setting_name: setting.id,
+                            media_type: "IMAGE",
                           })
                         }
                       >
                         Select IMAGE
+                      </button>
+                    )}
+                    {setting.type === "VIDEO" && (
+                      <button
+                        className="p-2 bg-neutral-700 text-neutral-100 font-semibold"
+                        onClick={() =>
+                          setMediaModal({
+                            component: selectedComponent,
+                            setting_name: setting.id,
+                            media_type: "VIDEO",
+                          })
+                        }
+                      >
+                        Select VIDEO
                       </button>
                     )}
                   </div>

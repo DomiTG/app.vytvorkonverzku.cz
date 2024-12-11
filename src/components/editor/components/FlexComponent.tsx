@@ -64,6 +64,13 @@ export default class FlexComponent extends IEditorComponent {
           value: 0,
           visible: true,
         },
+        {
+          id: "backgroundColor",
+          name: "Background Color",
+          type: "COLOR",
+          value: "transparent",
+          visible: true,
+        },
       ],
     );
   }
@@ -87,6 +94,9 @@ export default class FlexComponent extends IEditorComponent {
               | "column-reverse") || "row",
           gap: (this.getSetting("gap")?.value as number) || 0,
           padding: `${subCompLength === 0 ? "10px 10px 10px 10px" : `${padding + 5}px ${padding + 5}px ${padding + 5}px ${padding + 5}px`}`,
+          backgroundColor:
+            (this.getSetting("backgroundColor")?.value as string) ||
+            "transparent",
         }}
         onMouseEnter={() => this.getHoveredComponentMethod()(this)}
         onMouseLeave={() => this.getHoveredComponentMethod()(null)}

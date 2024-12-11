@@ -7,12 +7,23 @@ import Image from "next/image";
 export default function SelectImageModalComponent({
   component,
   media,
+  media_type,
   setModal,
-  setting_name
+  setting_name,
 }: {
   component: IEditorComponent;
+  media_type: "IMAGE" | "VIDEO";
   media: IMediaAttachment[];
-  setModal: Dispatch<SetStateAction<{ component: IEditorComponent | null; setting_name: string; } | undefined>>
+  setModal: Dispatch<
+    SetStateAction<
+      | {
+          component: IEditorComponent | null;
+          setting_name: string;
+          media_type: "IMAGE" | "VIDEO";
+        }
+      | undefined
+    >
+  >;
   setting_name: string;
 }) {
   useEffect(() => {
@@ -27,7 +38,12 @@ export default function SelectImageModalComponent({
     };
   }, []);
 
-  const setting = component.settings.find((settings) =>settings.id === setting_name)!;
+  const setting = component.settings.find(
+    (settings) => settings.id === setting_name,
+  )!;
+
+  console.log(media_type);
+  console.log(media);
 
   return (
     <div className="absolute inset-0 bg-black bg-opacity-60 flex justify-center items-center z-[50] transition-opacity duration-300">
@@ -35,7 +51,8 @@ export default function SelectImageModalComponent({
         {/* Header */}
         <div className="flex justify-between items-center border-b border-gray-200 p-4">
           <h2 className="text-lg font-semibold text-gray-800 uppercase">
-            Přidat komponentu - {component.name}
+            Přidat {media_type === "IMAGE" ? "obrázek" : "video"} -{" "}
+            {component.name}
           </h2>
           <button
             onClick={() => setModal(undefined)}
@@ -62,22 +79,34 @@ export default function SelectImageModalComponent({
         {/* Content */}
         <div className="flex flex-col items-center justify-center p-4 gap-4 max-h-[50vh] overflow-y-auto">
           {component && (
-            <div className="flex flex-row items-center justify-center flex-wrap gap-4 w-full">
-              {media.map((media, i) => (
-                <button
-                  key={i}
-                  className="w-28 h-28 flex flex-col items-center justify-center border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                  onClick={() => setting.value = media.url}
-                >
-                  <Image
-                    src={media.url}
-                    alt={media.name}
-                    className="w-full h-full object-cover rounded-lg"
-                    width={400}
-                    height={200}
-                />
-                </button>
-              ))}
+            <div className="flex flex-row items-center justify-center flex-wrap gap-4 w-full overflow-y-auto">
+              {media
+                .filter((med) => med.type === media_type)
+                .map((media, i) => (
+                  <button
+                    key={i}
+                    className="w-28 h-28 flex flex-col items-center justify-center border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    onClick={() => (setting.value = media.url)}
+                  >
+                    {media_type === "IMAGE" ? (
+                      <Image
+                        src={media.url}
+                        alt={media.name}
+                        className="w-full h-full object-cover rounded-lg"
+                        width={400}
+                        height={200}
+                      />
+                    ) : (
+                      <video
+                        src={media.url}
+                        className="w-full object-cover"
+                        crossOrigin="anonymous"
+                        onClick={() => (setting.value = media.url)}
+                        controls
+                      />
+                    )}
+                  </button>
+                ))}
             </div>
           )}
         </div>

@@ -1,8 +1,10 @@
 import { useUser } from "@/contexts/UserContext";
 import ISidebarItem from "@/interfaces/sidebar/ISidebarItem";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaArrowUp, FaCogs, FaHome } from "react-icons/fa";
 import { FaNewspaper } from "react-icons/fa6";
+import { LuLayoutTemplate } from "react-icons/lu";
 import { MdPermMedia } from "react-icons/md";
 
 export default function MainLayout({
@@ -35,6 +37,12 @@ export default function MainLayout({
       description: "Manage conversion pages",
       icon: FaNewspaper,
       href: "/converses",
+    },
+    {
+      name: "Template Creator",
+      description: "Create your templates",
+      icon: LuLayoutTemplate,
+      href: "/templates/creator",
     },
     {
       name: "Settings",
@@ -116,7 +124,7 @@ export default function MainLayout({
           {sidebarItems
             .filter((item) => item.additional)
             .map((val, i) => (
-              <a
+              <Link
                 key={i}
                 className={`flex items-center p-4 hover:bg-neutral-700 cursor-pointer gap-4 ${
                   val.href === window.location.pathname
@@ -132,7 +140,7 @@ export default function MainLayout({
                     {val.description}
                   </span>
                 </div>
-              </a>
+              </Link>
             ))}
         </div>
 
@@ -148,7 +156,7 @@ export default function MainLayout({
             {sidebarItems
               .filter((item) => !item.additional)
               .map((val, i) => (
-                <a
+                <Link
                   key={i}
                   className={`flex flex-col items-center gap-1 hover:text-neutral-100
                 ${
@@ -160,7 +168,7 @@ export default function MainLayout({
                 >
                   <val.icon className="text-xl" />
                   <span className="text-xs font-medium">{val.name}</span>
-                </a>
+                </Link>
               ))}
           </div>
         </div>

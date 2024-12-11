@@ -6,6 +6,8 @@ import NavbarLinkComponent from "./navbar/NavbarLinkComponent";
 import ImageElement from "../elements/ImageElement";
 import OwnHTMLElement from "../elements/OwnHTMLElement";
 import FlexComponent from "./FlexComponent";
+import VideoElement from "../elements/VideoElement";
+import EmbedElement from "../elements/EmbedElement";
 
 export default class RootComponent extends IEditorComponent {
   availableComponents: { category: string; components: IEditorComponent[] }[] =
@@ -19,7 +21,9 @@ export default class RootComponent extends IEditorComponent {
         components: [
           new TextComponent(),
           new ImageElement(),
+          new VideoElement(),
           new OwnHTMLElement(),
+          new EmbedElement(),
         ],
       },
       {

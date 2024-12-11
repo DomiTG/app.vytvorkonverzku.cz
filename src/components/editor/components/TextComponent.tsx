@@ -67,6 +67,35 @@ export default class TextComponent extends IEditorComponent {
         value: 0,
         visible: true,
       },
+      {
+        id: "font",
+        name: "Font",
+        type: "SELECT",
+        options: [
+          { id: "Arial, sans-serif", name: "Arial" },
+          { id: "'Helvetica Neue', Helvetica, sans-serif", name: "Helvetica" },
+          { id: "'Times New Roman', Times, serif", name: "Times New Roman" },
+          { id: "'Georgia', serif", name: "Georgia" },
+          { id: "'Courier New', Courier, monospace", name: "Courier New" },
+          { id: "'Verdana', sans-serif", name: "Verdana" },
+          { id: "'Trebuchet MS', sans-serif", name: "Trebuchet MS" },
+          { id: "'Tahoma', sans-serif", name: "Tahoma" },
+          { id: "'Impact', sans-serif", name: "Impact" },
+          { id: "'Comic Sans MS', sans-serif", name: "Comic Sans MS" },
+          { id: "'Lucida Sans', sans-serif", name: "Lucida Sans" },
+          { id: "'Palatino Linotype', Palatino, serif", name: "Palatino" },
+          { id: "'Garamond', serif", name: "Garamond" },
+          { id: "'Segoe UI', Tahoma, Geneva, sans-serif", name: "Segoe UI" },
+          { id: "'Roboto', sans-serif", name: "Roboto" },
+          { id: "'Open Sans', sans-serif", name: "Open Sans" },
+          { id: "'Lato', sans-serif", name: "Lato" },
+          { id: "'Oswald', sans-serif", name: "Oswald" },
+          { id: "'Montserrat', sans-serif", name: "Montserrat" },
+          { id: "'Ubuntu', sans-serif", name: "Ubuntu" },
+        ],
+        value: "Arial, sans-serif",
+        visible: true,
+      },
     ]);
     this.randomId =
       Math.floor(Math.random() * 100).toString() + Date.now().toString();
@@ -159,6 +188,7 @@ export default class TextComponent extends IEditorComponent {
     const lineHeight = (this.getSetting("line_height")?.value || 0) as number;
     const letterSpacing = (this.getSetting("letter_spacing")?.value ||
       0) as number;
+    const font = this.getSetting("font")?.value || "Arial, sans-serif";
 
     // Call getHtmlTag to generate the appropriate tag with props
     const tagElement = this.getHtmlTag(tag, {
@@ -170,6 +200,7 @@ export default class TextComponent extends IEditorComponent {
         color: textColor,
         lineHeight: lineHeight,
         letterSpacing: letterSpacing,
+        fontFamily: font,
       },
       dangerouslySetInnerHTML: { __html: htmlContent },
       onBlur: (e: any) => {
