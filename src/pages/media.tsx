@@ -1,6 +1,8 @@
+import FilterButtonComponent from "@/components/editor/components/filters/FilterButtonComponent";
 import MainLayout from "@/components/layouts/MainLayout";
 import MediaComponent from "@/components/media/MediaComponent";
 import { useUser } from "@/contexts/UserContext";
+import IFilterType from "@/interfaces/IFilterType";
 import IMedia from "@/interfaces/IMedia";
 import { useEffect, useState } from "react";
 
@@ -14,6 +16,48 @@ export default function MediaPage() {
   const [uploadModal, setUploadModal] = useState<boolean>(false);
   const [uploading, setUploading] = useState<boolean>(false);
   const [uploadFile, setUploadFile] = useState<File | null>(null);
+
+  const filterTypes: IFilterType[] = [
+    {
+      name: "NAME",
+      byName: "Podle názvu (A-Z)",
+      filter: (a, b) => a.name.localeCompare(b.name),
+    },
+    {
+      name: "NAME2",
+      byName: "Podle názvu (Z-A)",
+      filter: (a, b) => b.name.localeCompare(a.name),
+    },
+    {
+      name: "SIZE",
+      byName: "Podle velikosti (vzestupně)",
+      filter: (a, b) => a.size - b.size,
+    },
+    {
+      name: "SIZE2",
+      byName: "Podle velikosti (sestupně)",
+      filter: (a, b) => b.size - a.size,
+    },
+    {
+      name: "TYPE",
+      byName: "Podle typu",
+      filter: (a, b) => a.type.localeCompare(b.type),
+    },
+    {
+      name: "DATE",
+      byName: "Podle data (nejnovější)",
+      filter: (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+    },
+    {
+      name: "DATE2",
+      byName: "Podle data (nejstarší)",
+      filter: (a, b) =>
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+    },
+  ];
+
+  const [filter, setFilter] = useState<IFilterType | null>(filterTypes[0]);
 
   const handleUpload = async () => {
     if (!user || !uploadFile || uploading) return;
@@ -64,10 +108,10 @@ export default function MediaPage() {
 
   // Determine the current media items to display based on the current page
   const currentMedia = media
-    ? media.media.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage,
-      )
+    ? media.media
+        .slice() // Make a shallow copy to avoid mutating the original array
+        .sort(filter ? filter.filter : undefined)
+        .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
     : [];
 
   const totalPages = media ? Math.ceil(media.media.length / itemsPerPage) : 1;
@@ -130,9 +174,11 @@ export default function MediaPage() {
           >
             Přidat média
           </button>
-          <button className="text-xs font-semibold bg-gray-200 text-gray-700 px-4 py-2 rounded-md uppercase hover:bg-gray-300  cursor-pointer disabled:opacity-50">
-            Filtrovat média
-          </button>
+          <FilterButtonComponent
+            filterTypes={filterTypes}
+            setFilter={setFilter}
+            filter={filter || filterTypes[0]}
+          />
         </div>
       </div>
 

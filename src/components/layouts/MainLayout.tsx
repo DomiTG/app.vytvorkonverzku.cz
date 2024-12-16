@@ -2,10 +2,12 @@ import { useUser } from "@/contexts/UserContext";
 import ISidebarItem from "@/interfaces/sidebar/ISidebarItem";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { AiFillProduct } from "react-icons/ai";
+import { BsPlugFill, BsPlugin } from "react-icons/bs";
 import { FaArrowUp, FaCogs, FaHome } from "react-icons/fa";
-import { FaNewspaper } from "react-icons/fa6";
-import { LuLayoutTemplate } from "react-icons/lu";
+import { FaNewspaper, FaSackDollar, FaUsers } from "react-icons/fa6";
 import { MdPermMedia } from "react-icons/md";
+import { RiLayout2Fill } from "react-icons/ri";
 
 export default function MainLayout({
   children,
@@ -21,32 +23,56 @@ export default function MainLayout({
   const { user, loading } = useUser();
   const [sidebarItems, setSidebarItems] = useState<Array<ISidebarItem>>([
     {
-      name: "Dashboard",
-      description: "All the important stuff",
+      name: "Domov",
+      description: "Všechno důležité",
       icon: FaHome,
       href: "/",
     },
     {
-      name: "Media",
-      description: "List and upload media",
+      name: "Média",
+      description: "Seznam a nahrávání médií",
       icon: MdPermMedia,
       href: "/media",
     },
     {
-      name: "Conversion pages",
-      description: "Manage conversion pages",
+      name: "Konverzní stránky",
+      description: "Spravujte konverzní stránky",
       icon: FaNewspaper,
       href: "/converses",
     },
     {
-      name: "Template Creator",
-      description: "Create your templates",
-      icon: LuLayoutTemplate,
+      name: "Produkty",
+      description: "Spravujte produkty",
+      icon: AiFillProduct,
+      href: "/products",
+    },
+    {
+      name: "Objednávky",
+      description: "Spravujte objednávky",
+      icon: FaSackDollar,
+      href: "/orders",
+    },
+    {
+      name: "Zákazníci",
+      description: "Spravujte zákazníky",
+      icon: FaUsers,
+      href: "/customers",
+    },
+    {
+      name: "Šablony",
+      description: "Vytvořte novou šablonu",
+      icon: RiLayout2Fill,
       href: "/templates/creator",
     },
     {
-      name: "Settings",
-      description: "Manage settings",
+      name: "Integrace",
+      description: "Připojte další služby",
+      icon: BsPlugFill,
+      href: "/integrations",
+    },
+    {
+      name: "Nastavení",
+      description: "Spravujte nastavení",
       icon: FaCogs,
       href: "/settings",
     },
@@ -90,7 +116,7 @@ export default function MainLayout({
               className="border border-neutral-700 rounded-lg px-2 py-1 font-semibold uppercase text-xs hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-neutral-500"
               onClick={handleLogout}
             >
-              Logout
+              Odhlásit
             </button>
           </div>
         </div>
@@ -149,7 +175,7 @@ export default function MainLayout({
           <div className="bg-neutral-800 p-2 text-white flex justify-center items-center border border-neutral-700 w-full">
             <div className="flex flex-row items-center gap-2">
               <FaArrowUp className="text-xl" />
-              <p className="text-xs">Click to expand</p>
+              <p className="text-xs">Rozšířit</p>
             </div>
           </div>
           <div className="bg-neutral-800 text-white  flex justify-evenly py-4 z-[9999]">
@@ -167,7 +193,6 @@ export default function MainLayout({
                   href={val.href}
                 >
                   <val.icon className="text-xl" />
-                  <span className="text-xs font-medium">{val.name}</span>
                 </Link>
               ))}
           </div>

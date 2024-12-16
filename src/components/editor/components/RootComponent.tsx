@@ -33,7 +33,12 @@ export default class RootComponent extends IEditorComponent {
     ];
 
   constructor() {
-    super("Root", "Root component", "root", FaSquareRootAlt);
+    super(
+      "Root",
+      "Kořenový element je základním prvkem celé stránky. Můžete zde přidávat další komponenty a elementy.",
+      "root",
+      FaSquareRootAlt,
+    );
   }
 
   init(
@@ -71,9 +76,7 @@ export default class RootComponent extends IEditorComponent {
 
   productionRender(): JSX.Element {
     return (
-      <>
-        {this.subComponents.map((component) => component.productionRender())}
-      </>
+      <>{this.subComponents.map((component) => component.productionRender())}</>
     );
   }
 

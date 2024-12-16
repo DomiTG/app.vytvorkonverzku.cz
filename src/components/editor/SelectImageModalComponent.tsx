@@ -46,7 +46,7 @@ export default function SelectImageModalComponent({
   console.log(media);
 
   return (
-    <div className="absolute inset-0 bg-black bg-opacity-60 flex justify-center items-center z-[50] transition-opacity duration-300">
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-[50] transition-opacity duration-300">
       <div className="bg-white w-4/5 md:w-1/3 rounded-lg shadow-lg transform transition-all scale-95 flex flex-col">
         {/* Header */}
         <div className="flex justify-between items-center border-b border-gray-200 p-4">

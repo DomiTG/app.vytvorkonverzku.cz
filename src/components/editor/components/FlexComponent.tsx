@@ -110,9 +110,11 @@ export default class FlexComponent extends IEditorComponent {
   }
 
   productionRender(): JSX.Element {
+    const subCompLength = this.subComponents.length;
+    const padding = (this.getSetting("padding")?.value || 0) as number;
     return (
       <div
-        className="relative w-full flex items-center"
+        className={`relative w-full flex  items-center`}
         style={{
           justifyContent:
             (this.getSetting("justify")?.value as string) || "flex-start",
@@ -125,7 +127,7 @@ export default class FlexComponent extends IEditorComponent {
               | "column"
               | "column-reverse") || "row",
           gap: (this.getSetting("gap")?.value as number) || 0,
-          padding: `${(this.getSetting("padding")?.value as number)+5 || 0}px`,
+          padding: `${subCompLength === 0 ? "10px 10px 10px 10px" : `${padding + 5}px ${padding + 5}px ${padding + 5}px ${padding + 5}px`}`,
           backgroundColor:
             (this.getSetting("backgroundColor")?.value as string) ||
             "transparent",

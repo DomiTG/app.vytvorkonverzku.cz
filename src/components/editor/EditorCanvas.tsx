@@ -89,143 +89,150 @@ export default function EditorCanvas({
             <h1 className="text-xl font-semibold text-neutral-100">
               {selectedComponent.name}
             </h1>
-            <p className="text-neutral-300 text-xs truncate" title={selectedComponent.description}>
+            <p
+              className="text-neutral-300 text-xs truncate"
+              title={selectedComponent.description}
+            >
               {selectedComponent.description}
             </p>
           </div>
           <div className="flex flex-row gap-8 overflow-x-auto h-full text-neutral-100">
-            {selectedComponent.settings.filter((set) => set.visible).map((setting, i) => (
-              <div className="flex flex-col h-full p-2 flex-shrink-0" key={i}>
-                <label className="text-neutral-100 text-xs font-semibold uppercase">
-                  {setting.name}
-                </label>
-                {setting.type === "TEXT" && (
-                  <input
-                    type="text"
-                    className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md min-w-16"
-                    value={setting.value as string}
-                    onChange={(e) => {
-                      setting.value = e.target.value;
-                      toggle();
-                    }}
-                  />
-                )}
-                {setting.type === "TEXTAREA" && (
-                  <textarea
-                    className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md min-w-16"
-                    value={setting.value as string}
-                    onChange={(e) => {
-                      setting.value = e.target.value;
-                      toggle();
-                    }}
-                  />
-                )}
-                {setting.type === "BOOLEAN" && (
-                  <input
-                    type="checkbox"
-                    className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md min-w-16"
-                    checked={setting.value as boolean}
-                    onChange={(e) => {
-                      setting.value = e.target.checked;
-                      toggle();
-                    }}
-                  />
-                )}
-                {setting.type === "SELECT" && (
-                  <select
-                    className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md"
-                    value={setting.value as string}
-                    onChange={(e) => {
-                      setting.value = e.target.value;
-                      toggle();
-                    }}
-                  >
-                    {setting.options &&
-                      setting.options.map((option, i) => (
-                        <option key={i} value={option.id}>
-                          {option.name}
-                        </option>
-                      ))}
-                  </select>
-                )}
-                {setting.type === "RANGE" && (
-                  <input
-                    type="range"
-                    className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md"
-                    value={setting.value as number}
-                    min={setting.rangeMin || 0}
-                    max={setting.rangeMax || 100}
-                    onChange={(e) => {
-                      setting.value = Number(e.target.value);
-                      toggle();
-                    }}
-                  />
-                )}
-                {setting.type === "NUMBER" && (
-                  <input
-                    type="number"
-                    className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md"
-                    value={setting.value as number}
-                    onChange={(e) => {
-                      setting.value = Number(e.target.value);
-                      toggle();
-                    }}
-                  />
-                )}
-                {setting.type === "COLOR" && (
-                  <input
-                    type="color"
-                    className="w-full mt-1 text-xs bg-neutral-700 text-neutral-300 rounded-md h-full p-1"
-                    value={setting.value as string}
-                    onChange={(e) => {
-                      setting.value = e.target.value;
-                      toggle();
-                    }}
-                  />
-                )}
-                {setting.type === "CODE" && (
-                  <Editor
-                    placeholder="Some HTML code here"
-                    value={setting.value as string}
-                    onValueChange={(code: string) => {
-                      setting.value = code;
-                      toggle();
-                    }}
-                    highlight={(code) => highlight(code, languages.jsx!, `jsx`)}
-                    padding={10}
-                    className="bg-neutral-300"
-                  />
-                )}
-                {setting.type === "IMAGE" && (
-                  <button
-                    className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md"
-                    onClick={() =>
-                      setMediaModal({
-                        component: selectedComponent,
-                        setting_name: setting.id,
-                        media_type: "IMAGE",
-                      })
-                    }
-                  >
-                    Select IMAGE
-                  </button>
-                )}
-                {setting.type === "VIDEO" && (
-                  <button
-                    className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md"
-                    onClick={() =>
-                      setMediaModal({
-                        component: selectedComponent,
-                        setting_name: setting.id,
-                        media_type: "VIDEO",
-                      })
-                    }
-                  >
-                    Select VIDEO
-                  </button>
-                )}
-              </div>
-            ))}
+            {selectedComponent.settings
+              .filter((set) => set.visible)
+              .map((setting, i) => (
+                <div className="flex flex-col h-full p-2 flex-shrink-0" key={i}>
+                  <label className="text-neutral-100 text-xs font-semibold uppercase">
+                    {setting.name}
+                  </label>
+                  {setting.type === "TEXT" && (
+                    <input
+                      type="text"
+                      className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md min-w-16"
+                      value={setting.value as string}
+                      onChange={(e) => {
+                        setting.value = e.target.value;
+                        toggle();
+                      }}
+                    />
+                  )}
+                  {setting.type === "TEXTAREA" && (
+                    <textarea
+                      className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md min-w-16"
+                      value={setting.value as string}
+                      onChange={(e) => {
+                        setting.value = e.target.value;
+                        toggle();
+                      }}
+                    />
+                  )}
+                  {setting.type === "BOOLEAN" && (
+                    <input
+                      type="checkbox"
+                      className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md min-w-16"
+                      checked={setting.value as boolean}
+                      onChange={(e) => {
+                        setting.value = e.target.checked;
+                        toggle();
+                      }}
+                    />
+                  )}
+                  {setting.type === "SELECT" && (
+                    <select
+                      className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md"
+                      value={setting.value as string}
+                      onChange={(e) => {
+                        setting.value = e.target.value;
+                        toggle();
+                      }}
+                    >
+                      {setting.options &&
+                        setting.options.map((option, i) => (
+                          <option key={i} value={option.id}>
+                            {option.name}
+                          </option>
+                        ))}
+                    </select>
+                  )}
+                  {setting.type === "RANGE" && (
+                    <input
+                      type="range"
+                      className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md"
+                      value={setting.value as number}
+                      min={setting.rangeMin || 0}
+                      max={setting.rangeMax || 100}
+                      onChange={(e) => {
+                        setting.value = Number(e.target.value);
+                        toggle();
+                      }}
+                    />
+                  )}
+                  {setting.type === "NUMBER" && (
+                    <input
+                      type="number"
+                      className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md"
+                      value={setting.value as number}
+                      onChange={(e) => {
+                        setting.value = Number(e.target.value);
+                        toggle();
+                      }}
+                    />
+                  )}
+                  {setting.type === "COLOR" && (
+                    <input
+                      type="color"
+                      className="w-full mt-1 text-xs bg-neutral-700 text-neutral-300 rounded-md h-full p-1"
+                      value={setting.value as string}
+                      onChange={(e) => {
+                        setting.value = e.target.value;
+                        toggle();
+                      }}
+                    />
+                  )}
+                  {setting.type === "CODE" && (
+                    <Editor
+                      placeholder="Some HTML code here"
+                      value={setting.value as string}
+                      onValueChange={(code: string) => {
+                        setting.value = code;
+                        toggle();
+                      }}
+                      highlight={(code) =>
+                        highlight(code, languages.jsx!, `jsx`)
+                      }
+                      padding={10}
+                      className="bg-neutral-300"
+                    />
+                  )}
+                  {setting.type === "IMAGE" && (
+                    <button
+                      className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md"
+                      onClick={() =>
+                        setMediaModal({
+                          component: selectedComponent,
+                          setting_name: setting.id,
+                          media_type: "IMAGE",
+                        })
+                      }
+                    >
+                      Select IMAGE
+                    </button>
+                  )}
+                  {setting.type === "VIDEO" && (
+                    <button
+                      className="w-full mt-1 p-2 text-xs bg-neutral-700 text-neutral-300 rounded-md"
+                      onClick={() =>
+                        setMediaModal({
+                          component: selectedComponent,
+                          setting_name: setting.id,
+                          media_type: "VIDEO",
+                        })
+                      }
+                    >
+                      Select VIDEO
+                    </button>
+                  )}
+                </div>
+              ))}
           </div>
           <button
             onClick={() => setSelectedComponent(null)}
@@ -235,7 +242,7 @@ export default function EditorCanvas({
           </button>
         </div>
       )}
-      <div className="flex flex-row">
+      <div className="flex flex-row bg-white">
         {canvasMode === "DESKTOP" &&
           render(
             selectedPage,
@@ -243,7 +250,7 @@ export default function EditorCanvas({
             setModal,
             setSelectedComponent,
             setHoveredComponent,
-            productionSee
+            productionSee,
           )}
         {canvasMode === "MOBILE" && (
           <div className="flex justify-center items-center w-full h-full">
@@ -272,7 +279,7 @@ export default function EditorCanvas({
                 setModal,
                 setSelectedComponent,
                 setHoveredComponent,
-                productionSee
+                productionSee,
               )}
             </div>
           </div>
@@ -304,7 +311,7 @@ export default function EditorCanvas({
                 setModal,
                 setSelectedComponent,
                 setHoveredComponent,
-                productionSee
+                productionSee,
               )}
             </div>
           </div>
@@ -479,7 +486,7 @@ const render = (
   setModal: (component: IEditorComponent) => void,
   setSelectedComponent: (component: IEditorComponent) => void,
   setHoveredComponent: (component: IEditorComponent | null) => void,
-  productionSee: boolean
+  productionSee: boolean,
 ) => {
   let rootComponent = page.root_component as RootComponent;
   if (!rootComponent) {
@@ -488,17 +495,17 @@ const render = (
       updateMethod,
       setModal,
       setSelectedComponent,
-      setHoveredComponent
+      setHoveredComponent,
     );
     page.root_component = rootComp;
     rootComponent = rootComp;
   } else {
-    if(!rootComponent.updateMethod) {
+    if (!rootComponent.updateMethod) {
       rootComponent.init(
         updateMethod,
         setModal,
         setSelectedComponent,
-        setHoveredComponent
+        setHoveredComponent,
       );
     }
   }

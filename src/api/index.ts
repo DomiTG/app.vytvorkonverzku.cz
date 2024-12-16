@@ -86,6 +86,34 @@ export default class API {
     return data;
   }
 
+  //    const { name, description, template, thumbnail_url, converse_type } =
+  async createTemplate({
+    name,
+    description,
+    template,
+    thumbnail_url,
+    converse_type,
+  }: {
+    name: string;
+    description: string;
+    template: string;
+    thumbnail_url: string;
+    converse_type: string;
+  }) {
+    const data = await this.request({
+      endpoint: "/templates/create",
+      method: "POST",
+      body: {
+        name,
+        description,
+        template,
+        thumbnail_url,
+        converse_type,
+      },
+    });
+    return data;
+  }
+
   // Cdn Routes
   async uploadImage(file: File) {
     try {
