@@ -1,4 +1,4 @@
-import FilterButtonComponent from "@/components/editor/components/filters/FilterButtonComponent";
+import FilterButtonComponent from "@/components/filters/FilterButtonComponent";
 import MainLayout from "@/components/layouts/MainLayout";
 import MediaComponent from "@/components/media/MediaComponent";
 import { useUser } from "@/contexts/UserContext";
