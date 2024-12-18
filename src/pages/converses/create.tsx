@@ -1,13 +1,32 @@
+import useDebounce from "@/components/hooks/useDebounce";
 import MainLayout from "@/components/layouts/MainLayout";
 import { useUser } from "@/contexts/UserContext";
 import ITemplate from "@/interfaces/ITemplate";
+import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 
 export default function CreateConversePage() {
   const { user } = useUser();
+
   const [loading, setLoading] = useState<boolean>(false);
   const [templates, setTemplates] = useState<Array<ITemplate>>([]);
   const [activeTemplate, setActiveTemplate] = useState<ITemplate | null>(null);
+
+  const [name, setName] = useState<string>("");
+  const [type, setType] = useState<"PRODUCT" | "EMAIL">("PRODUCT");
+  const [description, setDescription] = useState<string>("");
+  const [domain, setDomain] = useState<string>("");
+  const [domainLoading, setDomainLoading] = useState<boolean>(false);
+  const [domainResponse, setDomainResponse] = useState<{
+    success: boolean;
+    message: string;
+  } | null>(null);
+  const debouncedValue = useDebounce(domain, 200);
+  const regex = /^[a-zA-Z0-9_-]{3,20}$/;
+
+  const converseTemplates = templates.filter(
+    (template) => template.converse_type === type,
+  );
 
   useEffect(() => {
     if (!user) return;
@@ -24,6 +43,65 @@ export default function CreateConversePage() {
     };
     fetchTemplates();
   }, []);
+
+  useEffect(() => {
+    if (converseTemplates.length > 0) {
+      setActiveTemplate(converseTemplates[0]);
+    } else {
+      setActiveTemplate(null);
+    }
+  }, [converseTemplates]);
+
+  useEffect(() => {
+    setDomainResponse(null);
+    if (debouncedValue.length < 3) return;
+    if (!user) return;
+    const checkDomain = async () => {
+      setDomainLoading(true);
+      if (!regex.test(debouncedValue)) {
+        setDomainResponse({
+          success: false,
+          message:
+            "Doména může obsahovat pouze písmena, čísla, pomlčku a podtržítko a musí mít délku 3-20 znaků.",
+        });
+        setDomainLoading(false);
+        return;
+      }
+      try {
+        const res = await user.api.checkDomain({ domain: debouncedValue });
+        if (res.success && !res.exists) {
+          setDomainResponse({
+            success: true,
+            message: `Doména ${debouncedValue}.konverzka.vytvorkonverzku.cz je dostupná.`,
+          });
+        } else {
+          setDomainResponse({
+            success: false,
+            message: `Doména ${debouncedValue}.konverzka.vytvorkonverzku.cz je již obsazena.`,
+          });
+        }
+        setDomainLoading(false);
+      } catch (err) {
+        if (err instanceof AxiosError) {
+          console.log(err);
+          const res = err.response?.data;
+          if (!res)
+            return setDomainResponse({
+              success: false,
+              message: "An unknown error occurred.",
+            });
+          setDomainResponse({ success: false, message: res.message });
+        } else {
+          setDomainResponse({
+            success: false,
+            message: "An unknown error occurred.",
+          });
+        }
+        setDomainLoading(false);
+      }
+    };
+    checkDomain();
+  }, [debouncedValue]);
 
   return (
     <MainLayout>
@@ -51,6 +129,8 @@ export default function CreateConversePage() {
                 id="name"
                 placeholder="Název konverzky"
                 className="rounded-md bg-gray-200 p-2 w-full mt-2 text-md"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
             <div className="flex flex-col w-full">
@@ -60,9 +140,11 @@ export default function CreateConversePage() {
               <select
                 id="type"
                 className="rounded-md bg-gray-200 p-2 w-full mt-2 text-lg"
+                value={type}
+                onChange={(e) => setType(e.target.value as "PRODUCT" | "EMAIL")}
               >
-                <option value="public">Produkt</option>
-                <option value="private">E-mail</option>
+                <option value="PRODUCT">Produkt</option>
+                <option value="EMAIL">E-mail</option>
               </select>
             </div>
           </div>
@@ -75,6 +157,8 @@ export default function CreateConversePage() {
               id="description"
               placeholder="Moje konverzka bude obsahovat..."
               className="rounded-md bg-gray-200 p-2 w-full mt-2 text-md"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </div>
           <h3 className="text-lg font-semibold mt-4">Nastavení konverzky</h3>
@@ -82,26 +166,44 @@ export default function CreateConversePage() {
             Jakou doménu bude konverzka používat a jaké bude mít nastavení.
           </p>
           <hr className="border border-gray-200 p-0 my-4" />
-          <div className="flex flex-row w-full mt-4 gap-4">
+          <div className="flex flex-col md:flex-row w-full mt-4 gap-4">
             <div className="flex flex-col w-full">
               <label htmlFor="domain" className="text-sm text-gray-500">
                 Doména konverzky <span className="text-red-500">*</span>
               </label>
-              <div className="flex items-center mt-2">
+              <div
+                className={`flex items-center mt-2 rounded-md ${domainLoading ? "opacity-50" : ""} ${!domainLoading && domainResponse ? (domainResponse.success ? "border border-green-500" : "border border-red-500") : ""}`}
+              >
                 <input
                   type="text"
                   id="domain"
                   placeholder="moje-konverzka"
-                  className="rounded-l-md bg-gray-200 p-2 w-full text-md"
+                  className="rounded-l-md bg-gray-200 p-2 w-full text-md focus:outline-none focus:ring-0"
+                  value={domain}
+                  onChange={(e) => setDomain(e.target.value)}
                 />
                 <span className="rounded-r-md bg-gray-200 p-2 text-md border-l border-gray-300 px-4 font-normal">
                   .konverzka.vytvorkonverzku.cz
                 </span>
               </div>
-              <p className="text-xs text-gray-500 mt-2">
-                Toto bude Vaše prvotní doména. Další domény (např. vlastní
-                doména) můžete přidat později.
-              </p>
+              {domainLoading && (
+                <p className="text-xs text-gray-500 mt-2">
+                  Kontrola dostupnosti...
+                </p>
+              )}
+              {domainResponse && !domainLoading && (
+                <p
+                  className={`text-xs mt-2 ${domainResponse.success ? "text-green-500" : "text-red-500"}`}
+                >
+                  {domainResponse.message}
+                </p>
+              )}
+              {!domainLoading && !domainResponse && (
+                <p className="text-xs text-gray-500 mt-2">
+                  Toto bude Vaše prvotní doména. Další domény (např. vlastní
+                  doména) můžete přidat později.
+                </p>
+              )}
             </div>
             <div className="flex flex-col w-full"></div>
           </div>
@@ -118,7 +220,7 @@ export default function CreateConversePage() {
               </div>
             )}
             {!loading &&
-              templates.map((template) => (
+              converseTemplates.map((template) => (
                 <div
                   key={template.id}
                   className={`bg-white rounded-lg overflow-hidden border relative ${

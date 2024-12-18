@@ -114,6 +114,14 @@ export default class API {
     return data;
   }
 
+  async checkDomain({ domain }: { domain: string }) {
+    const data = await this.request({
+      endpoint: `/conversions/checkDomain?domain=${domain}`,
+      method: "GET",
+    });
+    return data;
+  }
+
   // Cdn Routes
   async uploadImage(file: File) {
     try {
