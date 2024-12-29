@@ -62,13 +62,6 @@ export default function CreateConversePage() {
     fetchProducts();
   }, []);
 
-  useEffect(() => {
-    if (converseTemplates.length > 0) {
-      setActiveTemplate(converseTemplates[0]);
-    } else {
-      setActiveTemplate(null);
-    }
-  }, [converseTemplates]);
 
   useEffect(() => {
     setDomainResponse(null);
@@ -320,7 +313,10 @@ export default function CreateConversePage() {
                       ? "border-green-500"
                       : "border-gray-200"
                   }`}
-                  onClick={() => setActiveTemplate(template)}
+                  onClick={() => {
+                    console.log(template);
+                    setActiveTemplate(template);
+                  }}
                 >
                   <img
                     src={template.thumbnail_url}

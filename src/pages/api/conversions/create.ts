@@ -78,6 +78,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         live_mode: false,
         creator_id: user.id,
         product_id,
+        template: template.template
       },
     });
     if (!converse) {

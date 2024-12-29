@@ -124,7 +124,7 @@ export default function MainLayout({
 
       <div className="flex flex-1 w-full">
         {/* Sidebar */}
-        <div className="hidden md:block w-[250px] bg-neutral-800 text-white">
+        <div className="hidden md:block w-[250px] bg-neutral-800 text-white overflow-y-auto max-h-[calc(100vh-60px)]">
           {sidebarItems
             .filter((item) => !item.additional)
             .map((val, i) => (

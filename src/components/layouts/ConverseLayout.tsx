@@ -3,6 +3,7 @@ import MainLayout from "./MainLayout";
 import ISidebarItem from "@/interfaces/sidebar/ISidebarItem";
 import { FaHome } from "react-icons/fa";
 import { GrDomain } from "react-icons/gr";
+import { GoRepoTemplate } from "react-icons/go";
 
 export default function ConverseLayout({
   converse_id,
@@ -26,6 +27,12 @@ export default function ConverseLayout({
       icon: GrDomain,
       href: "/converses/" + converse_id + "/domains",
     },
+    {
+      name: "Editor",
+      description: "Upravuj konverzku",
+      icon: GoRepoTemplate,
+      href: "/converses/" + converse_id + "/editor",
+    }
   ]);
 
   return (

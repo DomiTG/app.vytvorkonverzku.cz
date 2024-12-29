@@ -26,6 +26,17 @@ export default function ConversesListPage() {
     fetchConverses();
   }, []);
 
+  const convertShopType = (type: string) => {
+    switch(type) {
+      case "PRODUCT":
+        return "Produkt";
+      case "EMAIL":
+        return "Email";
+      default:
+        return "Neznámý";
+    }
+  }
+
   return (
     <MainLayout>
       <h2 className="text-2xl font-semibold border-l-4 border-blue-500 pl-2 uppercase tracking-wider">
@@ -45,25 +56,58 @@ export default function ConversesListPage() {
         </div>
       )}
       {converses.length > 0 && (
-        <div className="bg-white rounded-lg overflow-hidden w-full mt-4 border border-gray-200">
-          {converses.map((converse) => (
-            <div
-              key={converse.id}
-              className="flex flex-row items-center justify-between border-b border-gray-200 py-4 px-10 hover:bg-gray-50 transition-all cursor-pointer"
-              onClick={() => router.push(`/converses/${converse.id}`)}
-            >
-              <div>
-                <h3 className="text-lg font-semibold">{converse.name}</h3>
-                <p className="text-gray-500 text-sm">{converse.type}</p>
-              </div>
-              <div>
-                <p className="text-gray-500 text-sm">
-                  {converse.created_at.toLocaleString()}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 mt-6">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+              <th scope="col" className="px-6 py-3">
+                Název
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Typ
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Živě?
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Akce
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {converses.map((converse, i) => (
+                <tr className="bg-white border-b" key={i}>
+                <th
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                >
+                  {converse.name}
+                </th>
+                <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                  {convertShopType(converse.type)}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                  {converse.live_mode ? "Ano" : "Ne"}
+                </td>
+                <td className="px-6 py-4">
+                  <Link
+                    href={`/converses/${converse.id}`}
+                    className="text-blue-500 hover:underline"
+                  >
+                    Editovat
+                  </Link>
+                  <Link
+                    href={`${converse.domains.length > 0 ? "https://" + converse.domains[0].domain : ""}`}
+                    className="text-blue-500 hover:underline ml-2"
+                    target="_blank"
+                  >
+                    Náhled
+                  </Link>
+
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
       <div className="flex flex-row justify-end gap-4 items-center mt-4">
         <Link

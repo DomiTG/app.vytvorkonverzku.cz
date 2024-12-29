@@ -8,6 +8,7 @@ import OwnHTMLElement from "../elements/OwnHTMLElement";
 import FlexComponent from "./FlexComponent";
 import VideoElement from "../elements/VideoElement";
 import EmbedElement from "../elements/EmbedElement";
+import CountdownComponent from "./CountdownComponent";
 
 export default class RootComponent extends IEditorComponent {
   availableComponents: { category: string; components: IEditorComponent[] }[] =
@@ -24,6 +25,7 @@ export default class RootComponent extends IEditorComponent {
           new VideoElement(),
           new OwnHTMLElement(),
           new EmbedElement(),
+          new CountdownComponent()
         ],
       },
       {
