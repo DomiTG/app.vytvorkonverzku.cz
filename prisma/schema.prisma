@@ -30,6 +30,7 @@ model users {
   converse_templates converse_templates[]
   conversion_pages   conversion_pages[]
   media              media[]
+  products           products[]
   refresh_tokens     refresh_tokens[]
 }
 
@@ -42,10 +43,13 @@ model conversion_pages {
   updated_at  DateTime             @default(now()) @db.DateTime(0)
   live_mode   Boolean              @default(false)
   creator_id  Int
+  product_id  Int
   creator     users                @relation(fields: [creator_id], references: [id], onUpdate: Restrict, map: "conversion_pages_ibfk_1")
+  product     products             @relation(fields: [product_id], references: [id], onUpdate: Restrict, map: "conversion_pages_ibfk_2")
   domains     page_domains[]
 
   @@index([creator_id], map: "conversion_pages_ibfk_1")
+  @@index([product_id], map: "product_id")
 }
 
 model media {
@@ -62,13 +66,13 @@ model media {
 }
 
 model page_domains {
-  id              Int              @id @default(autoincrement())
-  page_id         String
-  created_at      DateTime         @db.DateTime(0)
-  renewed_at      DateTime?        @db.DateTime(0)
-  domain          String           @db.VarChar(64)
-  system_domain   Boolean
-  conversion_page conversion_pages @relation(fields: [page_id], references: [id], onUpdate: Restrict, map: "page_domains_ibfk_1")
+  id            Int              @id @default(autoincrement())
+  page_id       String
+  created_at    DateTime         @db.DateTime(0)
+  renewed_at    DateTime?        @db.DateTime(0)
+  domain        String           @db.VarChar(64)
+  system_domain Boolean
+  converse      conversion_pages @relation(fields: [page_id], references: [id], onUpdate: Restrict, map: "page_domains_ibfk_1")
 
   @@index([page_id], map: "page_id")
 }
@@ -87,6 +91,25 @@ model converse_templates {
   @@index([creator_id], map: "creator_id")
 }
 
+model products {
+  id                 Int                      @id @default(autoincrement())
+  creator_id         Int
+  name               String                   @db.VarChar(36)
+  product_type       products_product_type
+  product_subtype    products_product_subtype
+  prices             String                   @db.LongText
+  tax_payer          Boolean
+  tax_included       Boolean
+  tax_rate           Int
+  weight             Int?
+  email_html_content String?                  @db.LongText
+  attachments        String?                  @db.LongText
+  conversion_pages   conversion_pages[]
+  creator            users                    @relation(fields: [creator_id], references: [id], onUpdate: Restrict, map: "products_ibfk_1")
+
+  @@index([creator_id], map: "creator_id")
+}
+
 enum conversion_page_type {
   PRODUCT
   EMAIL
@@ -101,4 +124,14 @@ enum media_type {
 enum converse_templates_converse_type {
   PRODUCT
   EMAIL
+}
+
+enum products_product_type {
+  PRODUCT
+  EMAIL
+}
+
+enum products_product_subtype {
+  DIGITAL
+  PHYSICAL
 }

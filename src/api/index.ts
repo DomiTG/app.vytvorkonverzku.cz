@@ -72,7 +72,7 @@ export default class API {
 
   async getConverses() {
     const data = await this.request({
-      endpoint: "/converses",
+      endpoint: "/conversions",
       method: "GET",
     });
     return data;
@@ -82,6 +82,82 @@ export default class API {
     const data = await this.request({
       endpoint: "/templates",
       method: "GET",
+    });
+    return data;
+  }
+
+  //products
+  async getProducts() {
+    const data = await this.request({
+      endpoint: "/products",
+      method: "GET",
+    });
+    return data;
+  }
+  /*
+
+  const schema = zod.object({
+    name: zod.string().min(3).max(255),
+    product_type: zod
+      .string()
+      .min(2)
+      .refine((val) => {
+        return ["product", "email"].includes(val);
+      }),
+    product_subtype: zod
+      .string()
+      .min(2)
+      .refine((val) => {
+        return ["physical", "digital"].includes(val);
+      }),
+    prices: zod.array(
+      zod.object({
+        currency: zod.string().min(3).max(3),
+        price: zod.number().min(0),
+      }),
+    ),
+    tax: zod.object({
+      taxPayer: zod.boolean(),
+      taxRate: zod.number().min(0),
+      taxIncluded: zod.boolean(),
+    }),
+    digital: zod
+      .object({
+        html_content: zod.string().optional(),
+        attachments: zod.array(zod.string()).optional(),
+      })
+      .optional(),
+  });
+  */
+  async createProduct({
+    name,
+    product_type,
+    product_subtype,
+    prices,
+    weight,
+    tax,
+    digital,
+  }: {
+    name: string;
+    product_type: string;
+    product_subtype: string;
+    prices: { currency: string; price: number }[];
+    weight?: number;
+    tax: { taxPayer: boolean; taxRate: number; taxIncluded: boolean };
+    digital: { html_content?: string; attachments?: string[] };
+  }) {
+    const data = await this.request({
+      endpoint: "/products/createProduct",
+      method: "POST",
+      body: {
+        name,
+        product_type,
+        product_subtype,
+        prices,
+        weight,
+        tax,
+        digital,
+      },
     });
     return data;
   }
@@ -118,6 +194,47 @@ export default class API {
     const data = await this.request({
       endpoint: `/conversions/checkDomain?domain=${domain}`,
       method: "GET",
+    });
+    return data;
+  }
+
+  /*
+  const schema = zod.object({
+    name: zod.string().min(3).max(50),
+    type: zod.enum(["PRODUCT", "EMAIL"]),
+    description: zod.string().optional(),
+    domain_name: zod.string().min(3).max(50),
+    product_id: zod.number(),
+    template_id: zod.number(),
+  });
+
+  */
+  async createConverse({
+    name,
+    type,
+    description,
+    domain_name,
+    product_id,
+    template_id,
+  }: {
+    name: string;
+    type: string;
+    description?: string;
+    domain_name: string;
+    product_id: number;
+    template_id: number;
+  }) {
+    const data = await this.request({
+      endpoint: "/conversions/create",
+      method: "POST",
+      body: {
+        name,
+        type,
+        description,
+        domain_name,
+        product_id,
+        template_id,
+      },
     });
     return data;
   }

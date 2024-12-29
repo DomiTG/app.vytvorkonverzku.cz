@@ -17,7 +17,7 @@ export default function ConversesListPage() {
     const fetchConverses = async () => {
       try {
         const res = await user.api.getConverses();
-        setConverses(res);
+        setConverses(res.converses);
         setLoading(false);
       } catch (err) {
         setLoading(false);

@@ -1,9 +1,10 @@
 import useDebounce from "@/components/hooks/useDebounce";
 import MainLayout from "@/components/layouts/MainLayout";
 import { useUser } from "@/contexts/UserContext";
+import IProduct from "@/interfaces/IProduct";
 import ITemplate from "@/interfaces/ITemplate";
 import { AxiosError } from "axios";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 export default function CreateConversePage() {
   const { user } = useUser();
@@ -12,6 +13,8 @@ export default function CreateConversePage() {
   const [templates, setTemplates] = useState<Array<ITemplate>>([]);
   const [activeTemplate, setActiveTemplate] = useState<ITemplate | null>(null);
 
+  const [error, setError] = useState<string | null>();
+  const [actionsDisabled, setActionsDisabled] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
   const [type, setType] = useState<"PRODUCT" | "EMAIL">("PRODUCT");
   const [description, setDescription] = useState<string>("");
@@ -22,6 +25,10 @@ export default function CreateConversePage() {
     message: string;
   } | null>(null);
   const debouncedValue = useDebounce(domain, 200);
+  const [availableProducts, setAvailableProducts] = useState<Array<IProduct>>(
+    [],
+  );
+  const [product, setProduct] = useState<IProduct | null>(null);
   const regex = /^[a-zA-Z0-9_-]{3,20}$/;
 
   const converseTemplates = templates.filter(
@@ -41,7 +48,18 @@ export default function CreateConversePage() {
         setLoading(false);
       }
     };
+    const fetchProducts = async () => {
+      try {
+        const res = await user.api.getProducts();
+        if (res.success) {
+          setAvailableProducts(res.products);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
     fetchTemplates();
+    fetchProducts();
   }, []);
 
   useEffect(() => {
@@ -103,6 +121,46 @@ export default function CreateConversePage() {
     checkDomain();
   }, [debouncedValue]);
 
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (loading) return;
+    if (actionsDisabled) return;
+    if (!user) return;
+    if (!name || !type || !domain || !product || !activeTemplate)
+      return setError("Please fill out all required fields.");
+    if (domainResponse && !domainResponse.success)
+      return setError(domainResponse.message);
+    setActionsDisabled(true);
+    try {
+      let additionalData = {};
+      if (description) additionalData = { description };
+      const converse = await user.api.createConverse({
+        name,
+        type,
+        domain_name: domain,
+        product_id: product.id,
+        template_id: activeTemplate.id,
+        ...additionalData,
+      });
+      if (converse.success) {
+        window.location.href = `/converses/${converse.converse.id}`;
+      } else {
+        setError(converse.message);
+        setActionsDisabled(false);
+      }
+    } catch (err) {
+      console.log(err);
+      if (err instanceof AxiosError) {
+        const res = err.response?.data;
+        if (!res) return setError("An unknown error occurred.");
+        setError(res.message);
+      } else {
+        setError("An unknown error occurred.");
+      }
+      setActionsDisabled(false);
+    }
+  }
+
   return (
     <MainLayout>
       <h2 className="text-2xl font-semibold border-l-4 border-blue-500 pl-2 uppercase tracking-wider">
@@ -113,7 +171,12 @@ export default function CreateConversePage() {
         všechny potřebné informace pro vaše zákazníky.
       </p>
       <div className="w-full mt-4">
-        <form className="w-full">
+        {error && (
+          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 px-4 py-3 relative mb-4 w-full">
+            {error}
+          </div>
+        )}
+        <form className="w-full" onSubmit={handleSubmit}>
           <h3 className="text-lg font-semibold mt-4">Základní informace</h3>
           <p className="text-gray-500">
             Zadejte základní informace o konverzce, jako je název, typ a popis.
@@ -205,7 +268,36 @@ export default function CreateConversePage() {
                 </p>
               )}
             </div>
-            <div className="flex flex-col w-full"></div>
+            <div className="flex flex-col w-full">
+              <label htmlFor="product" className="text-sm text-gray-500">
+                Produkt <span className="text-red-500">*</span>
+              </label>
+              <select
+                id="product"
+                className="rounded-md bg-gray-200 p-2 w-full mt-2 text-md"
+                value={product ? product.id : ""}
+                onChange={(e) => {
+                  const selectedProduct = availableProducts.find(
+                    (p) => p.id === parseInt(e.target.value),
+                  );
+                  setProduct(selectedProduct || null);
+                }}
+              >
+                <option value="" disabled>
+                  Vyberte produkt
+                </option>
+                {availableProducts
+                  .filter((p) => p.product_type === type)
+                  .map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.name}
+                    </option>
+                  ))}
+              </select>
+              <p className="text-xs text-gray-500 mt-2">
+                Vyberte produkt, který bude konverzka reprezentovat.
+              </p>
+            </div>
           </div>
           <h2 className="text-lg font-semibold mt-4">Vzhled konverzky</h2>
           <p className="text-gray-500">
@@ -260,7 +352,11 @@ export default function CreateConversePage() {
                 je povinné.
               </p>
             </div>
-            <button className="px-4 py-2 text-md font-bold text-white bg-blue-500 hover:bg-blue-600 rounded-lg transition-all uppercase">
+            <button
+              className="px-4 py-2 text-md font-bold text-white bg-blue-500 hover:bg-blue-600 rounded-lg transition-all uppercase disabled:opacity-50"
+              disabled={loading || actionsDisabled}
+              type="submit"
+            >
               Vytvořit konverzku
             </button>
           </div>
